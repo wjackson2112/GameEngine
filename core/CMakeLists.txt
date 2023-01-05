@@ -1,0 +1,19 @@
+set(SOURCES
+	AssetManager.cpp
+	Component.cpp
+	Entity.cpp
+	EntityManager.cpp
+	EventManager.cpp
+	Game.cpp
+	IEventReceiver.cpp
+	OptionsManager.cpp
+	Scene.cpp
+	SceneStack.cpp
+	Window.cpp)
+
+target_include_directories(GameEngine
+                           PUBLIC
+                           include)
+target_sources(GameEngine
+		       PRIVATE
+		       ${SOURCES})
