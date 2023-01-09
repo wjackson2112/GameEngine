@@ -11,7 +11,7 @@
 
 class SpriteComponent2D : public Component
 {
-private:
+protected:
     Shader shader;
     Texture2D texture;
     unsigned int quadVAO;
