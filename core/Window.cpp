@@ -55,8 +55,9 @@ Window::Window(bool depthTest /* = true */)
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     // Register base inputs
-	std::vector<Key> flags = {KEY_ESCAPE, KEY_F1};
-	InputManager::getInstance()->registerReceiver(this, flags);
+    InputConfig config = InputConfig();
+    config.keys.push_back(KEY_ESCAPE); config.keys.push_back(KEY_F1);
+	InputManager::getInstance()->registerReceiver(this, config);
 
     stbi_set_flip_vertically_on_load(true);
 }

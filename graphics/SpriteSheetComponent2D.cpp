@@ -49,8 +49,8 @@ SpriteSheetComponent2D::SpriteSheetComponent2D(Shader shader, Texture2D textureS
 
     glBindFramebuffer(GL_READ_FRAMEBUFFER, sheetFBO);
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER, spriteFBO);
-    glBlitFramebuffer(texture.width * initialX, texture.height * (gridSize.y - initialY),
-                      texture.width * (initialX + 1), texture.height * (gridSize.y - initialY - 1),
+    glBlitFramebuffer(texture.width * initialX + 1, texture.height * (gridSize.y - initialY),
+                      texture.width * (initialX + 1) + 1, texture.height * (gridSize.y - initialY - 1),
                       0, 0,
                       texture.width, texture.height,
                       GL_COLOR_BUFFER_BIT, GL_NEAREST);

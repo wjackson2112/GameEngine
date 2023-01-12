@@ -41,8 +41,9 @@ MenuButton::MenuButton(glm::vec2 origin, glm::vec2 size, std::string background,
 
     addComponent(textComponent);
 
-    std::vector<Key> flags = {};
-    InputManager::getInstance()->registerReceiver(this, flags);
+    InputConfig config = InputConfig();
+    config.mouseButtons.push_back(MOUSE_BUTTON_1);
+    InputManager::getInstance()->registerReceiver(this, config);
 }
 
 MenuButton::~MenuButton()
@@ -53,7 +54,6 @@ MenuButton::~MenuButton()
 void MenuButton::mouseInputCallback(double xpos, double ypos, MouseButton button, Action action, Modifier mods)
 {
     glm::vec2 origin = getWorldTransform().getPosition2();
-    std::cout << xpos << " " << ypos << std::endl;
     if(button == MOUSE_BUTTON_LEFT && action == ACTION_RELEASE &&
        xpos >= origin.x && xpos <= origin.x + size.x &&
        ypos >= origin.y && ypos <= origin.y + size.y)

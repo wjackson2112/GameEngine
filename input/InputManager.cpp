@@ -12,9 +12,9 @@ InputManager* InputManager::getInstance()
 	return instance;
 }
 
-void InputManager::registerReceiver(IInputReceiver* receiver, std::vector<Key> flags)
+void InputManager::registerReceiver(IInputReceiver* receiver, InputConfig config)
 {
- 	this->receivers[receiver] = flags;
+ 	this->receivers[receiver] = config;
 }
 
 void InputManager::deregisterReceiver(IInputReceiver *receiver)
@@ -43,7 +43,10 @@ void InputManager::mouse_pos_callback(GLFWwindow* window, double xpos, double yp
 	for(auto const& x : manager->receivers)
 	{
 		IInputReceiver* receiver = x.first;
-		receiver->mouseInputCallback(manager->cursorPos.x, manager->cursorPos.y, MOUSE_BUTTON_NONE, ACTION_NONE, (Modifier) 0);
+        bool receivesMousePosition = x.second.receivesMousePosition;
+
+        if(receivesMousePosition)
+		    receiver->mouseInputCallback(manager->cursorPos.x, manager->cursorPos.y, MOUSE_BUTTON_NONE, ACTION_NONE, (Modifier) 0);
 	}
 }
 
@@ -51,10 +54,15 @@ void InputManager::mouse_button_callback(GLFWwindow* window, int button, int act
 {
     InputManager* manager = getInstance();
 
+    manager->mouseState[button] = (Action) action;
+
     for(auto const& x : manager->receivers)
     {
         IInputReceiver* receiver = x.first;
-        receiver->mouseInputCallback(manager->cursorPos.x, manager->cursorPos.y, (MouseButton) button, (Action) action, (Modifier) 0);
+        std::vector<MouseButton> mouseButtons = x.second.mouseButtons;
+
+        if(std::find(mouseButtons.begin(), mouseButtons.end(), static_cast<MouseButton>(button)) != mouseButtons.end())
+            receiver->mouseInputCallback(manager->cursorPos.x, manager->cursorPos.y, (MouseButton) button, (Action) action, (Modifier) 0);
     }
 }
 
@@ -66,9 +74,9 @@ void InputManager::key_callback(GLFWwindow* window, int key, int scancode, int a
 	for(auto const& x : manager->receivers)
 	{
 		IInputReceiver* receiver = x.first;
-		std::vector<Key> flags = x.second;
+		std::vector<Key> keys = x.second.keys;
 
-		if(std::find(flags.begin(), flags.end(), static_cast<Key>(key)) != flags.end())
+		if(std::find(keys.begin(), keys.end(), static_cast<Key>(key)) != keys.end())
 			receiver->keyInputCallback((Key) key, scancode, (Action) action, (Modifier) mods);
 	}
 }

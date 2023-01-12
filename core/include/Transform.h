@@ -34,6 +34,7 @@ public:
     glm::vec3 getPosition() { return position; }
     glm::vec2 getPosition2() { return glm::vec2(position.x, position.y); }
     void setPosition(glm::vec3 position) { this->position = position; }
+    void setPosition2(glm::vec2 position) { this->position = glm::vec3(position.x, position.y, this->position.z); }
 
     glm::vec3 getScale() { return scale; }
 
