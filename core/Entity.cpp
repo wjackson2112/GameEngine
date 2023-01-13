@@ -56,3 +56,14 @@ void Entity::update(float deltaTime)
         if(child->receivesUpdates)
             child->update(deltaTime);
 }
+
+void Entity::lateUpdate(float deltaTime)
+{
+    for(Component* component : components)
+        if(component->receivesUpdates)
+            component->lateUpdate(deltaTime);
+
+    for(Entity* child : children)
+        if(child->receivesUpdates)
+            child->lateUpdate(deltaTime);
+}

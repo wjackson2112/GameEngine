@@ -2,9 +2,52 @@
 
 #include "InputManager.h"
 
-InputComponent::InputComponent(std::vector<Key> keys)
+#include <algorithm>
+
+InputComponent::InputComponent(const InputConfig config)
 {
     // Register base inputs
-	flags = keys;
-	InputManager::getInstance()->registerReceiver(this, flags);
+	InputManager::getInstance()->registerReceiver(this, config);
+
+    receivesUpdates = true;
+}
+
+KeyEvent InputComponent::dequeueKeyEvent()
+{
+    if(keyEvents.empty())
+        return {};
+
+    KeyEvent next = keyEvents.front();
+    keyEvents.pop();
+    return next;
+}
+
+MouseEvent InputComponent::dequeueMouseEvent()
+{
+    if(mouseEvents.empty())
+        return {};
+
+    MouseEvent next = mouseEvents.front();
+    mouseEvents.pop();
+    return next;
+}
+
+void InputComponent::lateUpdate(float deltaTime)
+{
+    while(!keyEvents.empty())
+        keyEvents.pop();
+
+    while(!mouseEvents.empty())
+        mouseEvents.pop();
+}
+
+void InputComponent::mouseInputCallback(double xpos, double ypos, MouseButton button, Action action, Modifier mods)
+{
+    mouseEvents.push(MouseEvent(glm::vec2(xpos, ypos), button, action, mods));
+}
+
+void InputComponent::keyInputCallback(Key key, int scancode, Action action, Modifier mods)
+{
+    // If list of monitored keys contains the current key
+    keyEvents.push(KeyEvent(key, action, mods));
 }

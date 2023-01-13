@@ -94,6 +94,12 @@ void Scene::update()
             entity->update(deltaTime);
     }
 
+    for(Entity* entity : entities)
+    {
+        if(entity->receivesUpdates)
+            entity->lateUpdate(deltaTime);
+    }
+
     // Cleanup any entities which have been marked as destroyed
     // Use a manual iterator here, so we can delete items mid-loop
     // TODO: Maybe this should move to the entity manager?
