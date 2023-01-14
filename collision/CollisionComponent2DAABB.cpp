@@ -21,8 +21,32 @@ void CollisionComponent2DAABB::resolveIfCollided(CollisionComponentBase* other)
 
         if(xCollided && yCollided)
         {
-            glm::vec3 overlap = glm::vec3(0.0f, 0.0f, 0.0f); // TODO: Make this a real vector representing the overlap
+            glm::vec3 start = glm::vec3(0.0f, 0.0f, 0.0f);
+            glm::vec3 end = glm::vec3(0.0f, 0.0f, 0.0f);
 
+            if(thisPosition.x < otherPosition.x)
+            {
+                start.x = thisPosition.x;
+                end.x = otherPosition.x;
+            }
+            else
+            {
+                start.x = otherPosition.x;
+                end.x = thisPosition.x;
+            }
+
+            if(thisPosition.y < otherPosition.y)
+            {
+                start.y = thisPosition.y;
+                end.y = otherPosition.y;
+            }
+            else
+            {
+                start.y = otherPosition.y;
+                end.y = thisPosition.y;
+            }
+
+            glm::vec3 overlap = (end - start);
             (receiver->collisionCallback)(otherComp->getReceiver(), overlap);
             (otherComp->getReceiver()->collisionCallback)(receiver, -overlap);
         }
