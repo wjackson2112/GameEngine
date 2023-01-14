@@ -64,12 +64,12 @@ AudioClip AssetManager::getAudioClip(std::string name)
     return audioClips[name];
 }
 
-TextFont AssetManager::loadTextFont(const char *path, std::string name)
+TextFont AssetManager::loadTextFont(const char *path, std::string name, int size)
 {
     if(textFonts.count(name))
         return textFonts[name];
 
-    textFonts[name] = loadTextFontFromFile(path);
+    textFonts[name] = loadTextFontFromFile(path, size);
     return textFonts[name];
 }
 
@@ -169,11 +169,11 @@ AudioClip AssetManager::loadAudioClipFromFile(const char* file, AudioFileFormat 
     return audioClip;
 }
 
-TextFont AssetManager::loadTextFontFromFile(const char *file)
+TextFont AssetManager::loadTextFontFromFile(const char *file, int size)
 {
     TextFont textFont;
 
-    textFont.load(file);
+    textFont.load(file, size);
 
     return textFont;
 }

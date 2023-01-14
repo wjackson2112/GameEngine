@@ -10,7 +10,7 @@
 #include <iostream>
 #include <glad/glad.h>
 
-void TextFont::load(const char* path)
+void TextFont::load(const char* path, int size)
 {
     FT_Library ft;
     FT_Face face;
@@ -21,7 +21,7 @@ void TextFont::load(const char* path)
     if(FT_New_Face(ft, path, 0, &face))
         std::cout << "ERROR:FREETYPE: Failed to load font" << std::endl;
 
-    FT_Set_Pixel_Sizes(face, 0, 48);
+    FT_Set_Pixel_Sizes(face, 0, size);
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 

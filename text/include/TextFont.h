@@ -21,7 +21,7 @@ public:
 
     int maxBearingY;
 
-    void load(const char* path);
+    void load(const char* path, int size);
 
     TextCharacter getCharacter(char rawChar);
 private:

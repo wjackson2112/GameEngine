@@ -42,7 +42,7 @@ public:
     AudioClip loadAudioClip(const char* path, AudioFileFormat fileFormat, std::string name);
     AudioClip getAudioClip(std::string name);
 
-    TextFont loadTextFont(const char* path, std::string name);
+    TextFont loadTextFont(const char* path, std::string name, int size);
     TextFont getTextFont(std::string name);
 
     void clear();
@@ -51,7 +51,7 @@ private:
     Shader loadShaderFromFile(const char* vertexShaderPath, const char* fragmentShaderPath, const char* geometryShaderPath);
     Texture2D loadTextureFromFile(const char* file, bool alpha);
     AudioClip loadAudioClipFromFile(const char* file, AudioFileFormat fileFormat);
-    TextFont loadTextFontFromFile(const char* file);
+    TextFont loadTextFontFromFile(const char* file, int size);
 };
 
 #endif //ASSET_MANAGER_H

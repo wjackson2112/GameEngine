@@ -32,7 +32,7 @@ MenuButton::MenuButton(glm::vec2 origin, glm::vec2 size, std::string background,
                                                                 nullptr,
                                                                 text);
     TextFont textFont = AssetManager::getInstance()->loadTextFont("assets\\arial.ttf",
-                                                                  "arial");
+                                                                  "arial48", 48);
     auto* textComponent = new TextComponent(textShader, textFont, text);
 
     float offsetPad = (size.y - textComponent->getMaxBearingY()) / 2;
