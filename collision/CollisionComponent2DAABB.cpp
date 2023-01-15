@@ -11,13 +11,15 @@ void CollisionComponent2DAABB::resolveIfCollided(CollisionComponentBase* other)
     if(auto* otherComp = dynamic_cast<CollisionComponent2DAABB*>(other))
     {
         glm::vec2 thisPosition = getWorldTransform().getPosition();
+        glm::vec2 thisSize = this->size;
         glm::vec2 otherPosition = otherComp->getWorldTransform().getPosition();
+        glm::vec2 otherSize = otherComp->getSize();
 
-        bool xCollided = thisPosition.x + this->size.x > otherPosition.x &&
-                         otherPosition.x + otherComp->getSize().x > thisPosition.x;
+        bool xCollided = thisPosition.x + thisSize.x > otherPosition.x &&
+                         otherPosition.x + otherSize.x > thisPosition.x;
 
-        bool yCollided = thisPosition.y + this->size.y > otherPosition.y &&
-                         otherPosition.y + otherComp->getSize().y > thisPosition.y;
+        bool yCollided = thisPosition.y + thisSize.y > otherPosition.y &&
+                         otherPosition.y + otherSize.y > thisPosition.y;
 
         if(xCollided && yCollided)
         {
@@ -25,26 +27,24 @@ void CollisionComponent2DAABB::resolveIfCollided(CollisionComponentBase* other)
             glm::vec3 end = glm::vec3(0.0f, 0.0f, 0.0f);
 
             if(thisPosition.x < otherPosition.x)
-            {
-                start.x = thisPosition.x;
-                end.x = otherPosition.x;
-            }
-            else
-            {
                 start.x = otherPosition.x;
-                end.x = thisPosition.x;
-            }
+            else
+                start.x = thisPosition.x;
+
+            if(thisPosition.x + thisSize.x < otherPosition.x + otherSize.x)
+                end.x = thisPosition.x + thisSize.x;
+            else
+                end.x = otherPosition.x + otherSize.x;
 
             if(thisPosition.y < otherPosition.y)
-            {
-                start.y = thisPosition.y;
-                end.y = otherPosition.y;
-            }
-            else
-            {
                 start.y = otherPosition.y;
-                end.y = thisPosition.y;
-            }
+            else
+                start.y = thisPosition.y;
+
+            if(thisPosition.y + thisSize.y < otherPosition.y + otherSize.y)
+                end.y = thisPosition.y + thisSize.y;
+            else
+                end.y = otherPosition.y + otherSize.y;
 
             glm::vec3 overlap = (end - start);
             (receiver->collisionCallback)(otherComp->getReceiver(), overlap);
