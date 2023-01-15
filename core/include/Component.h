@@ -21,8 +21,10 @@ public:
     virtual void update(float deltaTime) {};
     virtual void lateUpdate(float deltaTime) {};
     virtual void draw(glm::mat4 view, glm::mat4 projection, glm::vec3 lightDir, glm::vec3 viewPos) {};
+    Entity* getParent() { return parent; }
     void setParent(Entity* in_parent);
     void setTransform(Transform transform);
+    Transform* getTransform() { return &transform; }
     Transform getWorldTransform();
 };
 

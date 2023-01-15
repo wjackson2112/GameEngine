@@ -125,10 +125,16 @@ void Scene::resolveCollisions()
     }
 
     for(int i = 0; i < entities.size(); i++)
-        for(int j = i + 1; j < entities.size(); j++)
-            if(auto iColComp = entities[i]->getComponent<CollisionComponentBase>())
-                if(auto jColComp = entities[j]->getComponent<CollisionComponentBase>())
-                    iColComp->resolveIfCollided(jColComp);
+    {
+        for (int j = i + 1; j < entities.size(); j++)
+        {
+            std::vector<CollisionComponentBase *> iComponents = entities[i]->getComponents<CollisionComponentBase>();
+            std::vector<CollisionComponentBase *> jComponents = entities[j]->getComponents<CollisionComponentBase>();
+            for (auto &iComponent: iComponents)
+                for (auto &jComponent: jComponents)
+                    iComponent->resolveIfCollided(jComponent);
+        }
+    }
 
     // Cleanup any entities which have been marked as destroyed
     // Use a manual iterator here, so we can delete items mid-loop

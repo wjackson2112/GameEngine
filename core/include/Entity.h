@@ -46,6 +46,20 @@ public:
 		return nullptr;
 	}
 
+    template <class T>
+    std::vector<T*> getComponents()
+    {
+        std::vector<T*> returnValue;
+        for(Component* c : components)
+        {
+            if(T* component = dynamic_cast<T*>(c))
+            {
+                returnValue.push_back(component);
+            }
+        }
+        return returnValue;
+    }
+
 	Transform* getTransform() { return &transform; }
 	Transform getWorldTransform();
 };
