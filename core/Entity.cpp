@@ -3,6 +3,8 @@
 #include "ModelComponent.h"
 #include "Mesh.h"
 
+#include <algorithm>
+
 Entity::~Entity()
 {
 	for(Entity* child : children)
@@ -16,6 +18,16 @@ void Entity::addChild(Entity* child)
 {
 	child->setParent(this);
 	children.push_back(child);
+}
+
+void Entity::removeChild(Entity* child)
+{
+    if(child->parent == this)
+        child->parent = nullptr;
+
+    auto it = std::find(children.begin(), children.end(), child);
+    if(it != children.end())
+        children.erase(it);
 }
 
 void Entity::setParent(Entity* entity)

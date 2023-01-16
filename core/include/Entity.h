@@ -26,6 +26,7 @@ public:
 	virtual ~Entity();
 	
 	void addChild(Entity* child);
+    void removeChild(Entity* child);
 	void setParent(Entity* parent);
 	void addComponent(Component* component);
 
