@@ -12,6 +12,7 @@ class CollisionComponentBase : public Component
 {
 protected:
     ICollisionReceiver* receiver;
+    bool active = true;
 
 public:
     CollisionComponentBase(ICollisionReceiver* parent)
@@ -20,6 +21,9 @@ public:
     }
 
     inline ICollisionReceiver* getReceiver() { return receiver; }
+    inline void activate() { active = true; }
+    inline void deactivate() { active = false; }
+    inline bool isActive() { return active; }
 
     virtual void resolveIfCollided(CollisionComponentBase* other) = 0;
 };

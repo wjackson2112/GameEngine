@@ -1,6 +1,7 @@
 #include "InputComponent.h"
 
 #include "InputManager.h"
+#include "Entity.h"
 
 #include <algorithm>
 
@@ -43,11 +44,14 @@ void InputComponent::lateUpdate(float deltaTime)
 
 void InputComponent::mouseInputCallback(double xpos, double ypos, MouseButton button, Action action, Modifier mods)
 {
-    mouseEvents.push(MouseEvent(glm::vec2(xpos, ypos), button, action, mods));
+    // Don't listen for input if the parent isn't receiving updates
+    if(getParent()->receivesUpdates)
+        mouseEvents.push(MouseEvent(glm::vec2(xpos, ypos), button, action, mods));
 }
 
 void InputComponent::keyInputCallback(Key key, int scancode, Action action, Modifier mods)
 {
-    // If list of monitored keys contains the current key
-    keyEvents.push(KeyEvent(key, action, mods));
+    // Don't listen for input if the parent isn't receiving updates
+    if(getParent()->receivesUpdates)
+        keyEvents.push(KeyEvent(key, action, mods));
 }

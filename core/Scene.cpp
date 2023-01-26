@@ -126,8 +126,14 @@ void Scene::resolveCollisions()
 
     for(int i = 0; i < entities.size(); i++)
     {
+        if(!entities[i]->receivesUpdates)
+            continue;
+
         for (int j = i + 1; j < entities.size(); j++)
         {
+            if(!entities[j]->receivesUpdates)
+                continue;
+
             std::vector<CollisionComponentBase *> iComponents = entities[i]->getComponents<CollisionComponentBase>();
             std::vector<CollisionComponentBase *> jComponents = entities[j]->getComponents<CollisionComponentBase>();
             for (auto &iComponent: iComponents)

@@ -12,10 +12,14 @@ class SpriteSheetComponent2D : public SpriteComponent2D
 {
     unsigned int sheetFBO = 0;
     unsigned int spriteFBO = 0;
+    Texture2D textureSheet;
+    glm::vec2 gridSize;
 
 public:
     SpriteSheetComponent2D(Shader shader, Texture2D textureSheet, glm::vec2 size, glm::vec2 gridSize,
-                           int initialX = 0, int initialY = 0);
+                           glm::vec2 initialCoordinate = glm::vec2(0, 0));
+
+    void setSprite(glm::vec2 spriteCoordinate);
 };
 
 #endif //SPRITE_SHEET_COMPONENT_2D_H

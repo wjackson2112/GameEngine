@@ -165,24 +165,24 @@ void PostProcessor::end()
 
 void PostProcessor::eventCallback(Event event)
 {
-    switch(event)
-    {
-        case SOLID_HIT:
-            shakeTime = 0.05f;
-            break;
-        case POWER_CONFUSE_START:
-            confuseOn = true;
-            break;
-        case POWER_CONFUSE_END:
-            confuseOn = false;
-            break;
-        case POWER_CHAOS_START:
-            chaosOn = true;
-            break;
-        case POWER_CHAOS_END:
-            chaosOn = false;
-            break;
-        default:
-            break;
-    }
+//    switch(event)
+//    {
+//        case SOLID_HIT:
+//            shakeTime = 0.05f;
+//            break;
+//        case POWER_CONFUSE_START:
+//            confuseOn = true;
+//            break;
+//        case POWER_CONFUSE_END:
+//            confuseOn = false;
+//            break;
+//        case POWER_CHAOS_START:
+//            chaosOn = true;
+//            break;
+//        case POWER_CHAOS_END:
+//            chaosOn = false;
+//            break;
+//        default:
+//            break;
+//    }
 }

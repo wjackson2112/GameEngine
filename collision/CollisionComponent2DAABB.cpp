@@ -7,6 +7,9 @@
 
 void CollisionComponent2DAABB::resolveIfCollided(CollisionComponentBase* other)
 {
+    if(!active || !other->isActive())
+        return;
+
     // TODO: This logic should probably live in the base class somehow
     if(auto* otherComp = dynamic_cast<CollisionComponent2DAABB*>(other))
     {
