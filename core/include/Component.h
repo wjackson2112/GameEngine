@@ -17,6 +17,7 @@ public:
     bool receivesUpdates = false;
     // TODO: This should probably be updated to enforce that all components have a parent set
     Component() : parent(nullptr) { }
+    virtual ~Component() = default;
 
     virtual void update(float deltaTime) {};
     virtual void lateUpdate(float deltaTime) {};

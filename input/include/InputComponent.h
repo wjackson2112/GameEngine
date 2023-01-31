@@ -54,6 +54,7 @@ class InputComponent : public Component, public IInputReceiver
 
 public:
     InputComponent(InputConfig config);
+    ~InputComponent();
 
     inline bool hasKeyEvents() { return !keyEvents.empty(); };
     inline bool hasMouseEvents() { return !mouseEvents.empty(); };

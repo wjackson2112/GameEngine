@@ -13,6 +13,11 @@ InputComponent::InputComponent(const InputConfig config)
     receivesUpdates = true;
 }
 
+InputComponent::~InputComponent()
+{
+    InputManager::getInstance()->deregisterReceiver(this);
+}
+
 KeyEvent InputComponent::dequeueKeyEvent()
 {
     if(keyEvents.empty())
