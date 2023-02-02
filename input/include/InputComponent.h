@@ -9,58 +9,60 @@
 #include "InputManager.h"
 #include "Inputs.h"
 
-struct KeyEvent
+struct InputEvent
 {
     double timeSeconds;
+
+private:
+    bool keyEvent;
+public:
     Key key;
+    MouseButton button;
+
+    glm::vec2 position;
+
     Action action;
     Modifier mods;
 
-    KeyEvent() = default;
+    InputEvent() = default;
 
-    KeyEvent(Key key, Action action, Modifier mods)
-    : key(key)
+    InputEvent(Key key, Action action, Modifier mods)
+    : position(glm::vec2(0,0))
+    , key(key)
+    , button(MOUSE_BUTTON_NONE)
     , action(action)
     , mods(mods)
+    , keyEvent(true)
     {
         timeSeconds = glfwGetTime();
     }
-};
 
-struct MouseEvent
-{
-    double timeSeconds;
-    glm::vec2 position;
-    MouseButton button;
-    Action action;
-    Modifier mods;
-
-    MouseEvent() = default;
-
-    MouseEvent(glm::vec2 position, MouseButton button, Action action, Modifier mods)
+    InputEvent(glm::vec2 position, MouseButton button, Action action, Modifier mods)
     : position(position)
+    , key(KEY_UNKNOWN)
     , button(button)
     , action(action)
     , mods(mods)
+    , keyEvent(true)
     {
         timeSeconds = glfwGetTime();
     }
+
+    inline bool isKeyEvent() { return keyEvent; }
+    inline bool isMouseEvent() { return !keyEvent; }
 };
 
 class InputComponent : public Component, public IInputReceiver
 {
-    std::queue<KeyEvent> keyEvents;
-    std::queue<MouseEvent> mouseEvents;
+    std::queue<InputEvent> inputEvents;
 
 public:
     InputComponent(InputConfig config);
     ~InputComponent();
 
-    inline bool hasKeyEvents() { return !keyEvents.empty(); };
-    inline bool hasMouseEvents() { return !mouseEvents.empty(); };
+    inline bool hasEvents() { return !inputEvents.empty(); }
 
-    KeyEvent dequeueKeyEvent();
-    MouseEvent dequeueMouseEvent();
+    InputEvent dequeueEvent();
 
     //Component
     virtual void lateUpdate(float deltaTime) override;

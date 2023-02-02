@@ -18,45 +18,32 @@ InputComponent::~InputComponent()
     InputManager::getInstance()->deregisterReceiver(this);
 }
 
-KeyEvent InputComponent::dequeueKeyEvent()
+InputEvent InputComponent::dequeueEvent()
 {
-    if(keyEvents.empty())
+    if(inputEvents.empty())
         return {};
 
-    KeyEvent next = keyEvents.front();
-    keyEvents.pop();
-    return next;
-}
-
-MouseEvent InputComponent::dequeueMouseEvent()
-{
-    if(mouseEvents.empty())
-        return {};
-
-    MouseEvent next = mouseEvents.front();
-    mouseEvents.pop();
+    InputEvent next = inputEvents.front();
+    inputEvents.pop();
     return next;
 }
 
 void InputComponent::lateUpdate(float deltaTime)
 {
-    while(!keyEvents.empty())
-        keyEvents.pop();
-
-    while(!mouseEvents.empty())
-        mouseEvents.pop();
+    while(!inputEvents.empty())
+        inputEvents.pop();
 }
 
 void InputComponent::mouseInputCallback(double xpos, double ypos, MouseButton button, Action action, Modifier mods)
 {
     // Don't listen for input if the parent isn't receiving updates
     if(getParent()->receivesUpdates)
-        mouseEvents.push(MouseEvent(glm::vec2(xpos, ypos), button, action, mods));
+        inputEvents.push(InputEvent(glm::vec2(xpos, ypos), button, action, mods));
 }
 
 void InputComponent::keyInputCallback(Key key, int scancode, Action action, Modifier mods)
 {
     // Don't listen for input if the parent isn't receiving updates
     if(getParent()->receivesUpdates)
-        keyEvents.push(KeyEvent(key, action, mods));
+        inputEvents.push(InputEvent(key, action, mods));
 }
