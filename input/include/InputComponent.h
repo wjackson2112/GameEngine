@@ -43,7 +43,7 @@ public:
     , button(button)
     , action(action)
     , mods(mods)
-    , keyEvent(true)
+    , keyEvent(false)
     {
         timeSeconds = glfwGetTime();
     }
