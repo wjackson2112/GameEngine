@@ -4,6 +4,7 @@ project(GameEngine)
 
 add_library(GameEngine)
 
+add_subdirectory(animation)
 add_subdirectory(audio)
 add_subdirectory(camera)
 add_subdirectory(collision)
