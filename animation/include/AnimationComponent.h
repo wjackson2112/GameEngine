@@ -16,6 +16,7 @@ public:
     void addAndStart(Animation* newAnimation);
     void skipAll();
     void update(float deltaTime);
+    void lateUpdate(float deltaTime);
     bool hasAnimations() { return !animations.empty(); }
 
     template<class T>

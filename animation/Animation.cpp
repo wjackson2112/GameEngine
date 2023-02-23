@@ -18,7 +18,10 @@ void Animation::skip()
 void Animation::update(float deltaTime)
 {
     elapsedSeconds += deltaTime;
+}
 
+void Animation::lateUpdate(float deltaTime)
+{
     if(elapsedSeconds > lengthSeconds)
     {
         state = FINISHED;

@@ -43,3 +43,23 @@ void AnimationComponent::update(float deltaTime)
     if(animations.empty())
         receivesUpdates = false;
 }
+
+void AnimationComponent::lateUpdate(float deltaTime)
+{
+    // Snapshot the state of the animations before iterating
+    // (to avoid issues where animations are added midloop)
+    std::vector<Animation*> animationsCopy = animations;
+
+    for(auto animIter = animationsCopy.begin(); animIter != animationsCopy.end();)
+    {
+        if ((*animIter)->isRunning())
+            (*animIter)->lateUpdate(deltaTime);
+
+        if((*animIter)->hasFinished())
+            animations.erase(std::remove(animations.begin(), animations.end(), *animIter), animations.end());
+        animIter++;
+    }
+
+    if(animations.empty())
+        receivesUpdates = false;
+}

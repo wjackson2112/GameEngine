@@ -39,6 +39,7 @@ public:
     virtual void start();
     virtual void skip();
     virtual void update(float deltaTime);
+    virtual void lateUpdate(float deltaTime);
 };
 
 #endif //ANIMATION_H
