@@ -22,6 +22,8 @@ TextComponent::TextComponent(Shader shader, TextFont textFont, std::string text)
 
 void TextComponent::draw(glm::mat4 view, glm::mat4 projection, glm::vec3 lightDir, glm::vec3 viewPos)
 {
+    float originalX = transform.getPosition().x;
+
     glBlendFunc(GL_SRC_ALPHA, blendFunc);
     shader.use();
 
@@ -31,6 +33,14 @@ void TextComponent::draw(glm::mat4 view, glm::mat4 projection, glm::vec3 lightDi
     for(int i = 0; i < text.size(); i++)
     {
         char currentChar = text[i];
+
+        if(currentChar == '\n')
+        {
+            float currentX = transform.getPosition().x;
+            transform.translate(glm::vec3(originalX - currentX, textFont.maxBearingY + 1, 0.0f));
+            continue;
+        }
+
         TextFont::TextCharacter textChar = textFont.getCharacter(currentChar);
         unsigned int advance = textChar.advance/64;
 
