@@ -14,6 +14,8 @@ SpriteComponent2D::SpriteComponent2D(Shader shader, Texture2D texture, glm::vec2
 {
     this->InitRenderData();
     this->color = glm::vec3(1.0f);
+
+    this->setSize(size);
 }
 
 SpriteComponent2D::~SpriteComponent2D()
@@ -28,9 +30,6 @@ void SpriteComponent2D::draw(glm::mat4 view, glm::mat4 projection, glm::vec3 lig
 
     // Start with the accrued transform of the parent
     Transform transform = getWorldTransform();
-
-    // Set Origin to Center
-//    transform.translate(glm::vec3(-size.x/2, -size.y/2, 0.0f));
 
     // Scale to size
     transform.scaleTo(glm::vec3(size.x, size.y, 0.0f));
@@ -56,6 +55,9 @@ void SpriteComponent2D::setColor(glm::vec3 color)
 void SpriteComponent2D::setSize(glm::vec2 size)
 {
     this->size = size;
+
+    // Scale to default size
+    transform.scaleTo(glm::vec3(size.x, size.y, 0.0f));
 }
 
 void SpriteComponent2D::InitRenderData()
