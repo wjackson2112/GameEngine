@@ -33,12 +33,10 @@ void InputManager::mouse_pos_callback(GLFWwindow* window, double xpos, double yp
 	InputManager* manager = getInstance();
 
     // Convert screen mouse coordinate to viewport mouse coordinate
-    glm::vec2 screenRes = OptionsManager::getInstance()->getScreenResolution();
+    glm::vec2 windowSize = OptionsManager::getInstance()->getWindowSize();
     glm::vec2 viewportRes = OptionsManager::getInstance()->getViewportResolution();
 
-    // TODO: This math is going to have to cover the case where there are black bars on the edge of the screen with offsets someday
-    glm::vec2 ratio = screenRes/viewportRes;
-    manager->cursorPos = glm::vec2(xpos/ratio.x, ypos/ratio.y);
+    manager->cursorPos = glm::vec2(xpos, ypos);
 
 	for(auto const& x : manager->receivers)
 	{

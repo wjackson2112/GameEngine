@@ -6,11 +6,16 @@
 #define CAMERA_COMPONENT_2D_H
 
 #include "CameraComponentBase.h"
+#include "IOptionsReceiver.h"
 
-class CameraComponent2D : public CameraComponentBase
+class CameraComponent2D : public CameraComponentBase, public IOptionsReceiver
 {
 public:
     CameraComponent2D();
+    ~CameraComponent2D();
+
+    //IOptionsReceiver
+    void resolutionUpdated(glm::vec2 oldRes, glm::vec2 newRes);
 };
 
 #endif //CAMERA_COMPONENT_2D_H

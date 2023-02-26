@@ -5,6 +5,7 @@
 
 #include <glad/glad.h>
 #include "Entity.h"
+#include "OptionsManager.h"
 
 SpriteComponent2D::SpriteComponent2D(Shader shader, Texture2D texture, glm::vec2 size)
 : shader(shader)

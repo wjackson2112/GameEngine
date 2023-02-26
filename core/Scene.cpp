@@ -13,10 +13,10 @@
 
 Scene::Scene()
 {
-    postProcessor = new PostProcessor(AssetManager::getInstance()->loadShader("shaders\\screen.vert",
-                                                                              "shaders\\screen.frag",
-                                                                              nullptr,
-                                                                              "screen"));
+//    postProcessor = new PostProcessor(AssetManager::getInstance()->loadShader("shaders\\screen.vert",
+//                                                                              "shaders\\screen.frag",
+//                                                                              nullptr,
+//                                                                              "screen"));
 }
 
 Scene::~Scene()
@@ -55,7 +55,7 @@ void Scene::draw()
     }
 
     // Begin postprocessing
-    postProcessor->begin();
+//    postProcessor->begin();
 
     // Draw to the back buffer
     for(Entity* entity : entities)
@@ -69,7 +69,7 @@ void Scene::draw()
     }
 
     // End postprocessing
-    postProcessor->end();
+//    postProcessor->end();
 }
 
 void Scene::update()

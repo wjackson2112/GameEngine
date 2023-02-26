@@ -15,8 +15,8 @@ Window::Window(bool depthTest /* = true */)
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	// Create the GLFW Window
-    glm::vec2 screenRes = OptionsManager::getInstance()->getScreenResolution();
-	this->GLWindow = glfwCreateWindow(screenRes.x, screenRes.y, "FirstProject", NULL, NULL);
+    glm::vec2 windowSize = OptionsManager::getInstance()->getWindowSize();
+	this->GLWindow = glfwCreateWindow(windowSize.x, windowSize.y, "FirstProject", NULL, NULL);
 	if(GLWindow == NULL)
 	{
 		std::cout << "Failed to create a GLFW window" << std::endl;
@@ -41,6 +41,8 @@ Window::Window(bool depthTest /* = true */)
 	// Setup viewport and resizing
 	glViewport(0, 0, 1600, 1200);
 	glfwSetFramebufferSizeCallback(GLWindow, framebuffer_size_callback);
+
+    glfwSetWindowSizeLimits(GLWindow, 640, 480, GLFW_DONT_CARE, GLFW_DONT_CARE);
 
 	// Depth Testing
     if(depthTest)
@@ -131,4 +133,12 @@ void Window::toggleWireframeMode()
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		this->wireframeMode = false;
 	}
+}
+
+void Window::framebuffer_size_callback(GLFWwindow *window, int width, int height)
+{
+    glViewport(0, 0, width, height);
+
+    OptionsManager* optionsManager = OptionsManager::getInstance();
+    optionsManager->updateResolution(glm::vec2(width, height));
 }
