@@ -12,6 +12,7 @@ add_subdirectory(core)
 add_subdirectory(graphics)
 add_subdirectory(input)
 add_subdirectory(physics)
+add_subdirectory(platform)
 add_subdirectory(text)
 add_subdirectory(ui)
 
