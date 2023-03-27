@@ -19,6 +19,7 @@ public:
     Component() : parent(nullptr) { }
     virtual ~Component() = default;
 
+    virtual void earlyUpdate(float deltaTime) {};
     virtual void update(float deltaTime) {};
     virtual void lateUpdate(float deltaTime) {};
     virtual void draw(glm::mat4 view, glm::mat4 projection, glm::vec3 lightDir, glm::vec3 viewPos) {};

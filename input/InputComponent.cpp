@@ -4,6 +4,7 @@
 #include "Entity.h"
 
 #include <algorithm>
+#include <iostream>
 
 InputComponent::InputComponent(const InputConfig config)
 {
@@ -28,10 +29,45 @@ InputEvent InputComponent::dequeueEvent()
     return next;
 }
 
+void InputComponent::earlyUpdate(float deltaTime)
+{
+    Component::earlyUpdate(deltaTime);
+
+    static GamepadHandle gamepadHandle = GAMEPAD_HANDLE_NONE;
+
+    // TODO: Make this a stand alone function to get the gamepad handle
+    if(gamepadHandle == GAMEPAD_HANDLE_NONE || !glfwJoystickIsGamepad(gamepadHandle))
+        for(int i = 0; i < GAMEPAD_HANDLE_MAX; i++)
+            if(glfwJoystickIsGamepad(i))
+                gamepadHandle = (GamepadHandle) i;
+
+    if(!glfwJoystickIsGamepad(gamepadHandle))
+        return;
+
+    if(glfwGetGamepadState(gamepadHandle, &currState))
+    {
+        for(int i = 0; i < GAMEPAD_BUTTON_MAX; i++)
+            if(currState.buttons[i] != prevState.buttons[i])
+                gamepadInputCallback((GamepadButton) i, GAMEPAD_AXIS_NONE, 0.0f, (Action) currState.buttons[i]);
+
+        for(int i = 0; i < GAMEPAD_AXIS_MAX; i++)
+            if(currState.axes[i] != prevState.axes[i])
+                gamepadInputCallback(GAMEPAD_BUTTON_NONE, (GamepadAxis) i, currState.axes[i], ACTION_NONE);
+    }
+    prevState = currState;
+}
+
 void InputComponent::lateUpdate(float deltaTime)
 {
     while(!inputEvents.empty())
         inputEvents.pop();
+}
+
+void InputComponent::keyInputCallback(Key key, int scancode, Action action, Modifier mods)
+{
+    // Don't listen for input if the parent isn't receiving updates
+    if(getParent()->receivesUpdates)
+        inputEvents.push(InputEvent(key, action, mods));
 }
 
 void InputComponent::mouseInputCallback(double xpos, double ypos, MouseButton button, Action action, Modifier mods)
@@ -41,9 +77,9 @@ void InputComponent::mouseInputCallback(double xpos, double ypos, MouseButton bu
         inputEvents.push(InputEvent(glm::vec2(xpos, ypos), button, action, mods));
 }
 
-void InputComponent::keyInputCallback(Key key, int scancode, Action action, Modifier mods)
+void InputComponent::gamepadInputCallback(GamepadButton padButton, GamepadAxis axis, float axisValue, Action action)
 {
     // Don't listen for input if the parent isn't receiving updates
     if(getParent()->receivesUpdates)
-        inputEvents.push(InputEvent(key, action, mods));
+        inputEvents.push(InputEvent(padButton, axis, axisValue, action));
 }

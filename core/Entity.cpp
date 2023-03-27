@@ -58,6 +58,13 @@ void Entity::draw(glm::mat4 view, glm::mat4 projection, glm::vec3 lightDir, glm:
 		child->draw(view, projection, lightDir, viewPos);
 }
 
+void Entity::earlyUpdate(float deltaTime)
+{
+    for(Component* component : components)
+        if(component->receivesUpdates)
+            component->earlyUpdate(deltaTime);
+}
+
 void Entity::update(float deltaTime)
 {
     for(Component* component : components)

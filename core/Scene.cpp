@@ -86,6 +86,12 @@ void Scene::update()
 
     for(Entity* entity : entities)
     {
+        if(entity->receivesUpdates)
+            entity->earlyUpdate(deltaTime);
+    }
+
+    for(Entity* entity : entities)
+    {
         if(!activeCamera)
             if(auto camComp = entity->getComponent<CameraComponentBase>())
                 activeCamera = camComp;
