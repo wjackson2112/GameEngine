@@ -1,5 +1,6 @@
 set(SOURCES
-	MenuButton.cpp)
+	MenuButton.cpp
+	UIGrid.cpp)
 
 target_include_directories(GameEngine
                            PUBLIC

@@ -41,6 +41,7 @@ void Scene::draw()
     }); // TODO: I have no idea if this is better than just turning depth testing back on, check performance once text is implemented
 
 
+
     // Find the camera
     // TODO: This should probably be more intentional so multi camera can work
     if(!activeCamera)
