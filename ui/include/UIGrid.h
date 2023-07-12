@@ -11,17 +11,19 @@ enum UIGridDirection
 {
     UIGD_NONE,
     UIGD_UP,
+    UIGD_RIGHT,
     UIGD_DOWN,
-    UIGD_LEFT,
-    UIGD_RIGHT
+    UIGD_LEFT
 };
 
 class UIGrid
 {
-    UIGridDirection prevDirection = UIGD_NONE;
     std::vector<Entity*> elements;
-public:
 
+    UIGridDirection prevDirection = UIGD_NONE;
+    float bearing = 0.0f;
+
+public:
     void registerElement(Entity* element);
     void deregisterElement(Entity* element);
 
@@ -29,6 +31,9 @@ public:
     Entity* getElementBelow(Entity* element);
     Entity* getElementToLeft(Entity* element);
     Entity* getElementToRight(Entity* element);
+
+private:
+    void updateBearing(UIGridDirection newDirection, Entity* element);
 };
 
 #endif //UI_GRID_H

@@ -21,7 +21,11 @@ void UIGrid::deregisterElement(Entity* element)
 
 Entity* UIGrid::getElementAbove(Entity* element)
 {
+    updateBearing(UIGD_UP, element);
+
     glm::vec2 elementLocation = element->getWorldTransform().getPosition2();
+    elementLocation.x = bearing;
+
     glm::vec2 upVector = glm::vec2(0.0f, -1.0f);
 
     float bestDistance = INT_MAX;
@@ -62,7 +66,11 @@ Entity* UIGrid::getElementAbove(Entity* element)
 
 Entity* UIGrid::getElementBelow(Entity* element)
 {
+    updateBearing(UIGD_DOWN, element);
+
     glm::vec2 elementLocation = element->getWorldTransform().getPosition2();
+    elementLocation.x = bearing;
+
     glm::vec2 downVector = glm::vec2(0.0f, 1.0f);
 
     float bestDistance = INT_MAX;
@@ -103,7 +111,11 @@ Entity* UIGrid::getElementBelow(Entity* element)
 
 Entity *UIGrid::getElementToLeft(Entity* element)
 {
+    updateBearing(UIGD_LEFT, element);
+
     glm::vec2 elementLocation = element->getWorldTransform().getPosition2();
+    elementLocation.y = bearing;
+
     glm::vec2 leftVector = glm::vec2(-1.0f, 0.0f);
 
     float bestDistance = INT_MAX;
@@ -144,7 +156,11 @@ Entity *UIGrid::getElementToLeft(Entity* element)
 
 Entity* UIGrid::getElementToRight(Entity* element)
 {
+    updateBearing(UIGD_RIGHT, element);
+
     glm::vec2 elementLocation = element->getWorldTransform().getPosition2();
+    elementLocation.y = bearing;
+
     glm::vec2 rightVector = glm::vec2(1.0f, 0.0f);
 
     float bestDistance = INT_MAX;
@@ -181,4 +197,18 @@ Entity* UIGrid::getElementToRight(Entity* element)
 
     // Return best
     return bestEntity;
+}
+
+void UIGrid::updateBearing(UIGridDirection newDirection, Entity* element)
+{
+    // If the directions are not on the same axis
+    if(prevDirection == UIGD_NONE || prevDirection % 2 != newDirection % 2)
+    {
+        if(newDirection == UIGD_LEFT || newDirection == UIGD_RIGHT)
+            bearing = element->getWorldTransform().getPosition2().y;
+        else if(newDirection == UIGD_UP || newDirection == UIGD_DOWN)
+            bearing = element->getWorldTransform().getPosition2().x;
+    }
+
+    prevDirection = newDirection;
 }
