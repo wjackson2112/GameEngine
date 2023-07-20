@@ -14,7 +14,7 @@ SpriteComponent2D::SpriteComponent2D(Shader shader, Texture2D texture, glm::vec2
 , blendFunc(GL_ONE_MINUS_SRC_ALPHA)
 {
     this->InitRenderData();
-    this->color = glm::vec3(1.0f);
+    this->color = glm::vec4(1.0f);
 
     this->setSize(size);
 }
@@ -37,7 +37,7 @@ void SpriteComponent2D::draw(glm::mat4 view, glm::mat4 projection, glm::vec3 lig
 
     shader.setMat4("model", transform.getModel());
     shader.setMat4("projection", projection);
-    shader.setVec3("spriteColor", color);
+    shader.setVec4("spriteColor", color);
 
     glActiveTexture(GL_TEXTURE0);
     texture.bind();
@@ -48,7 +48,12 @@ void SpriteComponent2D::draw(glm::mat4 view, glm::mat4 projection, glm::vec3 lig
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // TODO: This should be reset to a global value set by the Window
 }
 
-void SpriteComponent2D::setColor(glm::vec3 color)
+void SpriteComponent2D::setColor3(glm::vec3 color)
+{
+    this->color = glm::vec4(color, this->color.w);
+}
+
+void SpriteComponent2D::setColor4(glm::vec4 color)
 {
     this->color = color;
 }

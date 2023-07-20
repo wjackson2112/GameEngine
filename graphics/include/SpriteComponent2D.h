@@ -16,7 +16,7 @@ protected:
     Texture2D texture;
     unsigned int quadVAO;
     glm::vec2 size;
-    glm::vec3 color;
+    glm::vec4 color;
     int blendFunc;
 
 public:
@@ -25,8 +25,11 @@ public:
 
     void draw(glm::mat4 view, glm::mat4 projection, glm::vec3 lightDir, glm::vec3 viewPos) override;
 
-    inline glm::vec3 getColor() { return color; };
-    void setColor(glm::vec3 color);
+    inline glm::vec3 getColor3() { return glm::vec3(color); };
+    void setColor3(glm::vec3 color);
+
+    inline glm::vec4 getColor4() { return color; };
+    void setColor4(glm::vec4 color);
 
     inline glm::vec2 getSize() { return size; };
     void setSize(glm::vec2 size);
