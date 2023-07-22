@@ -16,10 +16,12 @@ protected:
     Texture2D texture;
     unsigned int quadVAO;
     glm::vec2 size;
-    glm::vec4 color;
+
     int blendFunc;
 
 public:
+    glm::vec4 color;
+
     SpriteComponent2D(Shader shader, Texture2D texture, glm::vec2 size);
     ~SpriteComponent2D();
 
