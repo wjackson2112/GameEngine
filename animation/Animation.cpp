@@ -11,8 +11,10 @@ void Animation::start()
 
 void Animation::skip()
 {
-    state = FINISHED;
     elapsedSeconds = lengthSeconds;
+    state = FINISHED;
+    if(receiver)
+        receiver->animationComplete();
 }
 
 void Animation::update(float deltaTime)

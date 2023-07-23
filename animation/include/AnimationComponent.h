@@ -14,6 +14,7 @@ class AnimationComponent : public Component
     std::vector<Animation*> animations;
 public:
     void addAndStart(Animation* newAnimation);
+    void skip(Animation* animation);
     void skipAll();
     void update(float deltaTime);
     void lateUpdate(float deltaTime);
