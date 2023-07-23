@@ -91,8 +91,15 @@ void Scene::update()
             entity->earlyUpdate(deltaTime);
     }
 
+    entities = entityManager->getEntitiesInScene(this);
+
     for(Entity* entity : entities)
     {
+        // Make sure this entity still exists
+        std::vector<Entity*> currentEntities = entityManager->getEntitiesInScene(this);
+        if(std::find(currentEntities.begin(), currentEntities.end(), entity) == currentEntities.end())
+            continue;
+
         if(!activeCamera)
             if(auto camComp = entity->getComponent<CameraComponentBase>())
                 activeCamera = camComp;
@@ -101,8 +108,15 @@ void Scene::update()
             entity->update(deltaTime);
     }
 
+    entities = entityManager->getEntitiesInScene(this);
+
     for(Entity* entity : entities)
     {
+        // Make sure this entity still exists
+        std::vector<Entity*> currentEntities = entityManager->getEntitiesInScene(this);
+        if(std::find(currentEntities.begin(), currentEntities.end(), entity) == currentEntities.end())
+            continue;
+
         if(entity->receivesUpdates)
             entity->lateUpdate(deltaTime);
     }
