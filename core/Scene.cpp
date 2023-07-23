@@ -37,7 +37,7 @@ void Scene::draw()
     std::vector<Entity*> entities = entityManager->getEntitiesInScene(this);
     std::stable_sort(entities.begin(), entities.end(), [](Entity* first, Entity* second)
     {
-        return first->getTransform()->getPosition().z < second->getTransform()->getPosition().z;
+        return first->getWorldTransform().getPosition().z < second->getWorldTransform().getPosition().z;
     }); // TODO: I have no idea if this is better than just turning depth testing back on, check performance once text is implemented
 
 
