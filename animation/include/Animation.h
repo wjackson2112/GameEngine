@@ -8,7 +8,7 @@
 #include "Entity.h"
 #include "IAnimationCompleteReceiver.h"
 
-typedef void (Entity::*AnimDelegate)();
+typedef void (IAnimationCompleteReceiver::*AnimCompleteFunction)(Entity* AnimatedEntity);
 
 enum AnimationState
 {
@@ -24,14 +24,18 @@ protected:
     float lengthSeconds;
     float elapsedSeconds;
 
+    Entity* animatedEntity;
     IAnimationCompleteReceiver* receiver = nullptr;
+    AnimCompleteFunction completeFunction;
 public:
 
-    Animation(float lengthSeconds, IAnimationCompleteReceiver* receiver)
+    Animation(float lengthSeconds, Entity* animatedEntity, IAnimationCompleteReceiver* receiver = nullptr, AnimCompleteFunction completeFunction = &IAnimationCompleteReceiver::animationComplete)
     : state(WAITING)
     , lengthSeconds(lengthSeconds)
     , elapsedSeconds(0.0f)
-    , receiver(receiver) {}
+    , animatedEntity(animatedEntity)
+    , receiver(receiver)
+    , completeFunction(completeFunction) {}
 
     bool isRunning() { return state == RUNNING; }
     bool hasFinished() { return state == FINISHED; }

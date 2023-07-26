@@ -14,7 +14,7 @@ void Animation::skip()
     elapsedSeconds = lengthSeconds;
     state = FINISHED;
     if(receiver)
-        receiver->animationComplete();
+        ((*receiver).*completeFunction)(animatedEntity);
 }
 
 void Animation::update(float deltaTime)
@@ -28,6 +28,6 @@ void Animation::lateUpdate(float deltaTime)
     {
         state = FINISHED;
         if(receiver)
-            receiver->animationComplete();
+            ((*receiver).*completeFunction)(animatedEntity);
     }
 }

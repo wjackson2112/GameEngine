@@ -7,6 +7,7 @@
 
 #include "Transform.h"
 #include "Animation.h"
+#include "Entity.h"
 
 class TransformAnimation : public Animation
 {
@@ -14,10 +15,10 @@ class TransformAnimation : public Animation
     Transform* animatedTransform;
 
 public:
-    TransformAnimation(Transform* animatedTransform, Transform endTransform, float lengthSeconds, IAnimationCompleteReceiver* receiver = nullptr)
-    : Animation(lengthSeconds, receiver)
-    , animatedTransform(animatedTransform)
-    , startTransform(*animatedTransform)
+    TransformAnimation(Entity* animatedEntity, Transform endTransform, float lengthSeconds, IAnimationCompleteReceiver* receiver = nullptr)
+    : Animation(lengthSeconds, animatedEntity, receiver)
+    , animatedTransform(animatedEntity->getTransform())
+    , startTransform(*animatedEntity->getTransform())
     , endTransform(endTransform) {}
 
     virtual void start();

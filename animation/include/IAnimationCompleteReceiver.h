@@ -8,7 +8,7 @@
 class IAnimationCompleteReceiver
 {
 public:
-    virtual void animationComplete() = 0;
+    virtual void animationComplete(Entity* animatedEntity) {};
 };
 
 #endif //IANIMATION_COMPLETE_RECEIVER_H
