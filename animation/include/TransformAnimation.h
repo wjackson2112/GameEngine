@@ -15,8 +15,8 @@ class TransformAnimation : public Animation
     Transform* animatedTransform;
 
 public:
-    TransformAnimation(Entity* animatedEntity, Transform endTransform, float lengthSeconds, IAnimationCompleteReceiver* receiver = nullptr)
-    : Animation(lengthSeconds, animatedEntity, receiver)
+    TransformAnimation(Entity* animatedEntity, Transform endTransform, float lengthSeconds, IAnimationCompleteReceiver* receiver = nullptr, AnimCompleteFunction completeFunction = &IAnimationCompleteReceiver::animationComplete)
+    : Animation(lengthSeconds, animatedEntity, receiver, completeFunction)
     , animatedTransform(animatedEntity->getTransform())
     , startTransform(*animatedEntity->getTransform())
     , endTransform(endTransform) {}
