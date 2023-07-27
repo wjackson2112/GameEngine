@@ -62,6 +62,9 @@ Window::Window(bool depthTest /* = true */)
 	InputManager::getInstance()->registerReceiver(this, config);
 
     stbi_set_flip_vertically_on_load(true);
+
+    // VSync off
+    glfwSwapInterval(0);
 }
 
 bool Window::shouldClose()
