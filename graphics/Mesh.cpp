@@ -2,7 +2,13 @@
 // Created by Will on 5/30/2022.
 //
 #include "Mesh.h"
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+#define GL_GLEXT_PROTOTYPES
+#define EGL_EGLEXT_PROTOTYPES
+#else
 #include <glad/glad.h>
+#endif
 
 Mesh::Mesh(std::vector<Vertex> &vertices, std::vector<unsigned int> &indices, std::vector<Texture> &textures)
 {

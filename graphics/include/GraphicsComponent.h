@@ -30,7 +30,7 @@ public:
     ~GraphicsComponent();
 
     void update(float deltaTime) override {};
-    void draw(glm::mat4 view, glm::mat4 projection, glm::vec3 lightDir, glm::vec3 viewPos);
+    void draw(glm::mat4 view, glm::mat4 projection, glm::vec3 lightDir, glm::vec3 viewPos) override;
 
     // End Component Interface
 };

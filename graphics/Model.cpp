@@ -8,7 +8,13 @@
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 #include <stb_image.h>
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+#define GL_GLEXT_PROTOTYPES
+#define EGL_EGLEXT_PROTOTYPES
+#else
 #include <glad/glad.h>
+#endif
 
 Model::Model(std::string path)
 {

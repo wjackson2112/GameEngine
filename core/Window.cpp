@@ -32,11 +32,13 @@ Window::Window(bool depthTest /* = true */)
 	glfwSetKeyCallback(this->GLWindow, InputManager::key_callback);
 
 	// Load GLAD
+#ifndef __EMSCRIPTEN__
 	if(!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress))
 	{
 		std::cout << "Failed to initialize GLAD" << std::endl;
 		return;
 	}
+#endif
 
 	// Setup viewport and resizing
 	glViewport(0, 0, 1600, 1200);
@@ -50,7 +52,9 @@ Window::Window(bool depthTest /* = true */)
 
     // Turn on multisampling for MSAA
     glfwWindowHint(GLFW_SAMPLES, 4);
+#ifndef __EMSCRIPTEN__
     glEnable(GL_MULTISAMPLE);
+#endif
 
     // Alpha Blending
     glEnable(GL_BLEND);
@@ -64,7 +68,9 @@ Window::Window(bool depthTest /* = true */)
     stbi_set_flip_vertically_on_load(true);
 
     // VSync off
+#ifndef __EMSCRIPTEN__
     glfwSwapInterval(0);
+#endif
 }
 
 bool Window::shouldClose()
@@ -127,13 +133,13 @@ void Window::toggleWireframeMode()
 	if(!this->wireframeMode)
 	{
 		std::cout << "Wireframe Mode: On" << std::endl;
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+//		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		this->wireframeMode = true;
 	}
 	else
 	{
 		std::cout << "Wireframe Mode: Off" << std::endl;
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+//		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		this->wireframeMode = false;
 	}
 }

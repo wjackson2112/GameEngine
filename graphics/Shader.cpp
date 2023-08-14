@@ -1,14 +1,22 @@
-#include <glad/glad.h> // include glad to get all the required OpenGL headers
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+#define GL_GLEXT_PROTOTYPES
+#define EGL_EGLEXT_PROTOTYPES
+#else
+#include <glad/glad.h>
+#endif // include glad to get all the required OpenGL headers
+#include <GLFW/glfw3.h>
 #include "Shader.h"
 
 #include <fstream>
 #include <sstream>
 #include <iostream>
 
-#include <direct.h>
+//#include <direct.h>
 #define GetCurrentDir _getcwd
 
 #include <glm/gtc/type_ptr.hpp>
+
 
 void Shader::compile(std::string vertexCode, std::string fragmentCode, std::string geometryCode)
 {

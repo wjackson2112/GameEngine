@@ -32,7 +32,7 @@ InputEvent InputComponent::dequeueEvent()
 void InputComponent::earlyUpdate(float deltaTime)
 {
     Component::earlyUpdate(deltaTime);
-
+#ifndef __EMSCRIPTEN__
     static GamepadHandle gamepadHandle = GAMEPAD_HANDLE_NONE;
 
     // TODO: Make this a stand alone function to get the gamepad handle
@@ -44,6 +44,7 @@ void InputComponent::earlyUpdate(float deltaTime)
     if(!glfwJoystickIsGamepad(gamepadHandle))
         return;
 
+
     if(glfwGetGamepadState(gamepadHandle, &currState))
     {
         for(int i = 0; i < GAMEPAD_BUTTON_MAX; i++)
@@ -54,6 +55,7 @@ void InputComponent::earlyUpdate(float deltaTime)
             if(currState.axes[i] != prevState.axes[i])
                 gamepadInputCallback(GAMEPAD_BUTTON_NONE, (GamepadAxis) i, currState.axes[i], ACTION_NONE);
     }
+#endif
     prevState = currState;
 }
 

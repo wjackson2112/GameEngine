@@ -1,14 +1,28 @@
 
 #include "AssetManager.h"
 
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+#define GL_GLEXT_PROTOTYPES
+#define EGL_EGLEXT_PROTOTYPES
+
+#else
+#include <direct.h>
 #include <glad/glad.h>
+#endif
+#include <GLFW/glfw3.h>
 #include <fstream>
 #include <sstream>
 #include <iostream>
 
-#include <direct.h>
-#define GetCurrentDir _getcwd
 
+#ifdef __EMSCRIPTEN__
+#define SEPARATOR_CHAR "/"
+#else
+#define SEPARATOR_CHAR "\\"
+#endif
+
+#include <filesystem>
 #include "stb_image.h"
 
 AssetManager *AssetManager::instance = nullptr;
@@ -98,19 +112,32 @@ Shader AssetManager::loadShaderFromFile(const char* vertexShaderPath, const char
 
     try
     {
-        char vert_buff[200]; //create string buffer to hold path
-        char frag_buff[200];
-        GetCurrentDir( vert_buff, 200 );
-        GetCurrentDir( frag_buff, 200 );
-        strcat(vert_buff, "\\");
-        strcat(vert_buff, vertexShaderPath);
+//        char vert_buff[200]; //create string buffer to hold path
+//        char frag_buff[200];
+//#ifdef __EMSCRIPTEN__
+//        strcat(vert_buff, std::filesystem::current_path().c_str());
+//        strcat(frag_buff, std::filesystem::current_path().c_str());
+//#else
+//        GetCurrentDir( vert_buff, 200 );
+//        GetCurrentDir( frag_buff, 200 );
+//#endif
+//        strcat(vert_buff, "/");
+//        strcat(vert_buff, vertexShaderPath);
+//
+//        strcat(frag_buff, "/");
+//        strcat(frag_buff, fragmentShaderPath);
 
-        strcat(frag_buff, "\\");
-        strcat(frag_buff, fragmentShaderPath);
+        std::filesystem::path vertPath = std::filesystem::current_path();
+        vertPath /= vertexShaderPath;
+        vertPath.make_preferred();
+
+        std::filesystem::path fragPath = std::filesystem::current_path();
+        fragPath /= fragmentShaderPath;
+        fragPath.make_preferred();
 
         // Open files
-        vertexFile.open(vert_buff);
-        fragmentFile.open(frag_buff);
+        vertexFile.open(vertPath);
+        fragmentFile.open(fragPath);
         std::stringstream vertexStream, fragmentStream;
 
         // Read file's buffer contents in to streams
@@ -151,8 +178,12 @@ Texture2D AssetManager::loadTextureFromFile(const char* path, bool alpha)
         texture.imageFormat = GL_RGBA;
     }
 
+    std::filesystem::path normalizedPath = std::filesystem::current_path();
+    normalizedPath /= path;
+    normalizedPath.make_preferred();
+
     int width, height, nrChannels;
-    unsigned char *data = stbi_load(path, &width, &height, &nrChannels, 0);
+    unsigned char *data = stbi_load(normalizedPath.string().c_str(), &width, &height, &nrChannels, 0);
 
     texture.generate(width, height, data);
 

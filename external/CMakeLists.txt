@@ -1,3 +1,13 @@
+if(EMSCRIPTEN)
+    target_link_libraries(GameEngine
+            glm
+            stb_image)
+    # GLM
+    add_subdirectory(glm)
+    add_subdirectory(stb_image)
+    #    set(FT_DISABLE_HARFBUZZ ON CACHE BOOL "" FORCE)
+    #    add_subdirectory(freetype-2.12.1)
+else()
 find_package(OpenGL REQUIRED)
 target_link_libraries(GameEngine
         OpenGL::GL
@@ -35,3 +45,4 @@ add_subdirectory(openal-soft-1.22.2)
 # FreeType
 set(FT_DISABLE_HARFBUZZ ON CACHE BOOL "" FORCE)
 add_subdirectory(freetype-2.12.1)
+endif()

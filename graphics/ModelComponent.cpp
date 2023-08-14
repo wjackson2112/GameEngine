@@ -2,7 +2,13 @@
 // Created by Will on 6/5/2022.
 //
 
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+#define GL_GLEXT_PROTOTYPES
+#define EGL_EGLEXT_PROTOTYPES
+#else
 #include <glad/glad.h>
+#endif
 
 #include "Transform.h"
 #include "ModelComponent.h"

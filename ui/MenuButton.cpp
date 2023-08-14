@@ -19,19 +19,19 @@ MenuButton::MenuButton(glm::vec2 origin, glm::vec2 size, std::string background,
 {
     transform.translate(origin);
 
-    Shader spriteShader = AssetManager::getInstance()->loadShader("shaders\\sprite.vert",
-                                                                  "shaders\\sprite.frag",
+    Shader spriteShader = AssetManager::getInstance()->loadShader("shaders/sprite.vert",
+                                                                  "shaders/sprite.frag",
                                                                   nullptr,
                                                                   "block");
     Texture2D texture = AssetManager::getInstance()->loadTexture(background.c_str(), false, background);
     auto spriteComponent = new SpriteComponent2D(spriteShader, texture, size);
     addComponent(spriteComponent);
 
-    Shader textShader = AssetManager::getInstance()->loadShader("shaders\\text.vert",
-                                                                "shaders\\text.frag",
+    Shader textShader = AssetManager::getInstance()->loadShader("shaders/text.vert",
+                                                                "shaders/text.frag",
                                                                 nullptr,
                                                                 text);
-    TextFont textFont = AssetManager::getInstance()->loadTextFont("assets\\arial.ttf",
+    TextFont textFont = AssetManager::getInstance()->loadTextFont("assets/arial.ttf",
                                                                   "arial48", 48);
     auto* textComponent = new TextComponent(textShader, textFont, text);
 
