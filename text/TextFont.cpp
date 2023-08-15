@@ -42,7 +42,7 @@ void TextFont::load(const char* path, int size)
         }
 
         Texture2D texture;
-        texture.internalFormat = GL_RED;
+        texture.internalFormat = GL_R8;
         texture.imageFormat = GL_RED;
         texture.wrapS = GL_CLAMP_TO_EDGE;
         texture.wrapT = GL_CLAMP_TO_EDGE;
