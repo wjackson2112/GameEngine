@@ -41,7 +41,8 @@ void InputComponent::earlyUpdate(float deltaTime)
             if(glfwJoystickIsGamepad(i))
                 gamepadHandle = (GamepadHandle) i;
 
-    if(!glfwJoystickIsGamepad(gamepadHandle))
+    // If still no gamepad detected, get out
+    if(gamepadHandle == GAMEPAD_HANDLE_NONE || !glfwJoystickIsGamepad(gamepadHandle))
         return;
 
 
