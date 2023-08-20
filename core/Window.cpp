@@ -48,7 +48,7 @@ Window::Window(bool depthTest /* = true */)
 
 	// Depth Testing
     if(depthTest)
-	    glEnable(GL_DEPTH_TEST);
+        glEnable(GL_DEPTH_TEST);
 
     // Turn on multisampling for MSAA
     glfwWindowHint(GLFW_SAMPLES, 4);

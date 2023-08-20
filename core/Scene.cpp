@@ -19,10 +19,10 @@
 
 Scene::Scene()
 {
-//    postProcessor = new PostProcessor(AssetManager::getInstance()->loadShader("shaders\\screen.vert",
-//                                                                              "shaders\\screen.frag",
-//                                                                              nullptr,
-//                                                                              "screen"));
+    postProcessor = new PostProcessor(AssetManager::getInstance()->loadShader("shaders\\screen.vert",
+                                                                              "shaders\\screen.frag",
+                                                                              nullptr,
+                                                                              "screen"));
 }
 
 Scene::~Scene()
@@ -37,15 +37,18 @@ Scene::~Scene()
 
 void Scene::draw()
 {
-    // Sort by depth to ensure furthest back objects are drawn first
-    // TODO: These entities should be made const
+//    // Sort by depth to ensure furthest back objects are drawn first
+//    // TODO: These entities should be made const
     EntityManager* entityManager = EntityManager::getInstance();
     std::vector<Entity*> entities = entityManager->getEntitiesInScene(this);
-    std::stable_sort(entities.begin(), entities.end(), [](Entity* first, Entity* second)
-    {
-        return first->getWorldTransform().getPosition().z < second->getWorldTransform().getPosition().z;
-    }); // TODO: I have no idea if this is better than just turning depth testing back on, check performance once text is implemented
 
+    // TODO: Removed this and turned on depth testing
+    //       Keeping it here so it can be used to depth sort _transparent_ objects later
+    //       After blending is implemented - https://learnopengl.com/Advanced-OpenGL/Blending
+//    std::stable_sort(entities.begin(), entities.end(), [](Entity* first, Entity* second)
+//    {
+//        return first->getWorldTransform().getPosition().z < second->getWorldTransform().getPosition().z;
+//    }); // TODO: I have no idea if this is better than just turning depth testing back on, check performance once text is implemented
 
 
     // Find the camera
@@ -62,7 +65,7 @@ void Scene::draw()
     }
 
     // Begin postprocessing
-//    postProcessor->begin();
+    postProcessor->begin();
 
     // Draw to the back buffer
     for(Entity* entity : entities)
@@ -76,7 +79,7 @@ void Scene::draw()
     }
 
     // End postprocessing
-//    postProcessor->end();
+    postProcessor->end();
 }
 
 void Scene::update()
