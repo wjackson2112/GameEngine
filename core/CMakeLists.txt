@@ -2,7 +2,6 @@ set(SOURCES
 	AssetManager.cpp
 	Component.cpp
 	Entity.cpp
-	EntityManager.cpp
 	EventManager.cpp
 	Game.cpp
 	IEventReceiver.cpp

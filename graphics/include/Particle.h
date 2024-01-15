@@ -12,7 +12,6 @@
 
 #include "Shader.h"
 #include "Texture2D.h"
-#include "EntityManager.h"
 
 class Particle : public Entity
 {
@@ -21,9 +20,9 @@ protected:
 
 public:
     Particle(Entity* emitter, glm::vec3 emitPosition) {
-        // TODO: Maybe all entities should do this?
-        Scene* owningScene = EntityManager::getInstance()->getSceneForEntity(emitter);
-        EntityManager::getInstance()->registerEntity(owningScene, this);
+        // TODO: EntityManager has been removed, fix this code to account
+//        Scene* owningScene = EntityManager::getInstance()->getSceneForEntity(emitter);
+//        EntityManager::getInstance()->registerEntity(owningScene, this);
     };
 
     inline const bool isAlive() { return life > 0.0f; }

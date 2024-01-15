@@ -35,6 +35,11 @@ void Entity::setParent(Entity* entity)
 	parent = entity;
 }
 
+void Entity::setOwningScene(Scene *scene)
+{
+    owningScene = scene;
+}
+
 void Entity::addComponent(Component* component)
 {
 	component->setParent(this);

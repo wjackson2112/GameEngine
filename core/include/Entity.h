@@ -9,6 +9,8 @@
 #include "Component.h"
 #include "Transform.h"
 
+class Scene;
+
 class Entity
 {
 protected:
@@ -16,6 +18,7 @@ protected:
 	std::vector<Entity*> children;
 	std::vector<Component*> components;
 	Transform transform;
+    Scene* owningScene;
 
 public:
 	bool receivesUpdates = false;
@@ -28,6 +31,7 @@ public:
 	void addChild(Entity* child);
     void removeChild(Entity* child);
 	void setParent(Entity* parent);
+    void setOwningScene(Scene* scene);
 	void addComponent(Component* component);
 
 	void draw(glm::mat4 view, glm::mat4 projection, glm::vec3 lightDir, glm::vec3 viewPos);
