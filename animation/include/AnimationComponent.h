@@ -6,25 +6,32 @@
 #define ANIMATION_COMPONENT_H
 
 #include <vector>
+#include <memory>
 #include "Component.h"
 #include "Animation.h"
 
 class AnimationComponent : public Component
 {
-    std::vector<Animation*> animations;
+    std::vector<std::unique_ptr<Animation>> animations;
 public:
-    void addAndStart(Animation* newAnimation);
-    void skip(Animation* animation);
     void skipAll();
-    void update(float deltaTime);
-    void lateUpdate(float deltaTime);
+    void update(float deltaTime) override;
+    void lateUpdate(float deltaTime) override;
     bool hasAnimations() { return !animations.empty(); }
+
+    template<class T, typename... Args>
+    T* addAndStart(Args... args)
+    {
+        T* animation = new T(args...);
+        animations.push_back(std::unique_ptr(animation));
+        return animation;
+    }
 
     template<class T>
     std::vector<T> getAnimations()
     {
         std::vector<T> output;
-        for(auto animation : animations)
+        for(const auto& animation : animations)
         {
             if(auto castAnimation = dynamic_cast<T*>(animation))
             {

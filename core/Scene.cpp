@@ -54,7 +54,7 @@ void Scene::draw()
     // TODO: This should probably be more intentional so multi camera can work
     if(!activeCamera)
     {
-        for (const auto& [key, entity]: entities)
+        for (const auto& entity: entities)
         {
             if (auto camComp = entity->getComponent<CameraComponentBase>())
             {
@@ -68,7 +68,7 @@ void Scene::draw()
     postProcessor->begin();
 
     // Draw to the back buffer
-    for (const auto& [key, entity]: entities)
+    for (const auto& entity: entities)
     {
         Transform cameraWorldTransform = activeCamera->getWorldTransform();
         glm::mat4 cameraProjection = activeCamera->getProjection();
@@ -94,7 +94,7 @@ void Scene::update()
 //    EntityManager* entityManager = EntityManager::getInstance();
 //    std::vector<Entity*> entities = entityManager->getEntitiesInScene(*this);
 
-    for (const auto& [key, entity]: entities)
+    for (const auto& entity: entities)
     {
         if(entity->receivesUpdates)
             entity->earlyUpdate(deltaTime);
@@ -102,7 +102,7 @@ void Scene::update()
 
 //    entities = entityManager->getEntitiesInScene(*this);
 
-    for (const auto& [key, entity]: entities)
+    for (const auto& entity: entities)
     {
         // Make sure this entity still exists
 //        std::vector<Entity*> currentEntities = entityManager->getEntitiesInScene(*this);
@@ -119,7 +119,7 @@ void Scene::update()
 
 //    entities = entityManager->getEntitiesInScene(*this);
 
-    for (const auto& [key, entity]: entities)
+    for (const auto& entity: entities)
     {
         // Make sure this entity still exists
 //        std::vector<Entity*> currentEntities = entityManager->getEntitiesInScene(*this);
@@ -137,7 +137,7 @@ void Scene::update()
     while(it != entities.end())
     {
         auto next_it = it; ++next_it;
-        if(it->second->shouldBeDestroyed)
+        if(it->get()->shouldBeDestroyed)
             entities.erase(it);
         it = next_it;
     }
@@ -150,7 +150,7 @@ void Scene::resolveCollisions()
 //    EntityManager* entityManager = EntityManager::getInstance();
 //    std::vector<Entity*> entities = entityManager->getEntitiesInScene(*this);
 
-    for (const auto& [key, entity]: entities)
+    for (const auto& entity: entities)
     {
         collisionEntities.push_back(entity.get());
     }
@@ -158,21 +158,21 @@ void Scene::resolveCollisions()
 //    for(int i = 0; i < entities.size(); i++)
     for(auto it = entities.begin(); it != entities.end(); it++)
     {
-        if(!it->second->receivesUpdates)
+        if(!it->get()->receivesUpdates)
             continue;
 
 //        for (int j = i + 1; j < entities.size(); j++)
         auto other_it = it; other_it++;
         while(other_it != entities.end())
         {
-            if(!other_it->second->receivesUpdates)
+            if(!other_it->get()->receivesUpdates)
             {
                 other_it++;
                 continue;
             }
 
-            std::vector<CollisionComponentBase *> iComponents = it->second->getComponents<CollisionComponentBase>();
-            std::vector<CollisionComponentBase *> jComponents = other_it->second->getComponents<CollisionComponentBase>();
+            std::vector<CollisionComponentBase *> iComponents = it->get()->getComponents<CollisionComponentBase>();
+            std::vector<CollisionComponentBase *> jComponents = other_it->get()->getComponents<CollisionComponentBase>();
             for (auto &iComponent: iComponents)
                 for (auto &jComponent: jComponents)
                     iComponent->resolveIfCollided(jComponent);
@@ -187,7 +187,7 @@ void Scene::resolveCollisions()
     while(it != entities.end())
     {
         auto next_it = it; ++next_it;
-        if(it->second->shouldBeDestroyed)
+        if(it->get()->shouldBeDestroyed)
             entities.erase(it);
         it = next_it;
     }

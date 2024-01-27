@@ -8,6 +8,5 @@
 
 AudioContextEntity::AudioContextEntity()
 {
-    AudioContextComponent* conComp = new AudioContextComponent();
-    addComponent(conComp);
+    addComponent<AudioContextComponent>();
 }

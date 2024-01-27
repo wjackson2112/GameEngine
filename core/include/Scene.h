@@ -4,7 +4,6 @@
 #include <vector>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include <map>
 #include <memory>
 
 #include "Entity.h"
@@ -20,7 +19,7 @@ class Scene
 
     PostProcessor* postProcessor;
 
-    std::map<std::string, std::unique_ptr<Entity>> entities;
+    std::vector<std::unique_ptr<Entity>> entities;
 
 public:
     Scene();
@@ -31,22 +30,13 @@ public:
 
 
     template<typename T, typename... Args>
-    void addEntity(std::string key, Args... args)
+    T* addEntity(Args... args)
     {
-        entities.insert({key, std::make_unique<T>(args...)});
-        entities[key]->setOwningScene(this);
-    }
+        T* entity = new T(args...);
+        entities.push_back(std::unique_ptr<T>(entity));
+        entities.back()->setOwningScene(this);
 
-    template<typename T>
-    T* getEntity(const std::string& key)
-    {
-        if(entities.count(key) == 0)
-            return nullptr;
-
-        if(auto entity = dynamic_cast<T*>(entities[key].get()))
-            return entity;
-
-        return nullptr;
+        return entity;
     }
 };
 

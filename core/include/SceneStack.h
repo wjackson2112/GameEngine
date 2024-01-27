@@ -10,33 +10,58 @@
 
 #include "Scene.h"
 
+struct SceneSettings
+{
+    bool updatesFromBackground = false;
+    bool hasTransparency = false;
+
+    SceneSettings()
+    : updatesFromBackground(false)
+    , hasTransparency(false)
+    {};
+
+    SceneSettings(bool updatesFromBackground, bool hasTransparency)
+    : updatesFromBackground(updatesFromBackground)
+    , hasTransparency(hasTransparency)
+    {};
+};
+
 class SceneStack
 {
     struct SceneStackEntry
     {
-        Scene* scene;
-        bool updatesFromBackground;
-        bool hasTransparency;
+        std::unique_ptr<Scene> scene;
+        SceneSettings settings;
 
         explicit SceneStackEntry(Scene* scene)
-        : scene(scene)
-        , updatesFromBackground(false)
-        , hasTransparency(false)
-        {};
+        : settings(SceneSettings())
+        {
+            this->scene = std::unique_ptr<Scene>(scene);
+        }
 
-        SceneStackEntry(Scene* scene, bool updatesFromBackground, bool hasTransparency)
-        : scene(scene)
-        , updatesFromBackground(updatesFromBackground)
-        , hasTransparency(hasTransparency)
-        {};
+        explicit SceneStackEntry(SceneSettings settings, Scene* scene)
+        : settings(settings)
+        {
+            this->scene = std::unique_ptr<Scene>(scene);
+        }
     };
 
     std::vector<SceneStackEntry> sceneEntries;
 
 public:
-    void pushScene(Scene* scene, bool updatesFromBackground = false, bool hasTransparency = false);
+    void pushScene(Scene* scene);
+    void pushScene(SceneSettings settings, Scene* scene);
+
+    template<class T, typename... Args>
+    T* pushScene(SceneSettings settings, Args... args)
+    {
+        T* scene = new T(args...);
+        sceneEntries.emplace_back(SceneStackEntry(settings, scene));
+        return scene;
+    }
+
     Scene* peekScene();
-    Scene* popScene();
+    std::unique_ptr<Scene> popScene();
     void clearScenes();
 
     void draw();

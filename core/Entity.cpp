@@ -5,31 +5,6 @@
 
 #include <algorithm>
 
-Entity::~Entity()
-{
-	for(Entity* child : children)
-		delete child;
-
-	for(Component* component : components) 
-		delete component;
-}
-
-void Entity::addChild(Entity* child)
-{
-	child->setParent(this);
-	children.push_back(child);
-}
-
-void Entity::removeChild(Entity* child)
-{
-    if(child->parent == this)
-        child->parent = nullptr;
-
-    auto it = std::find(children.begin(), children.end(), child);
-    if(it != children.end())
-        children.erase(it);
-}
-
 void Entity::setParent(Entity* entity)
 {
 	parent = entity;
@@ -38,12 +13,6 @@ void Entity::setParent(Entity* entity)
 void Entity::setOwningScene(Scene *scene)
 {
     owningScene = scene;
-}
-
-void Entity::addComponent(Component* component)
-{
-	component->setParent(this);
-	components.push_back(component);
 }
 
 Transform Entity::getWorldTransform()
@@ -56,30 +25,30 @@ Transform Entity::getWorldTransform()
 
 void Entity::draw(glm::mat4 view, glm::mat4 projection, glm::vec3 lightDir, glm::vec3 viewPos)
 {
-    for(Component* component : components)
+    for(const auto& component : components)
         component->draw(view, projection, lightDir, viewPos);
 
-	for(Entity* child : children)
+	for(const auto& child : children)
 		child->draw(view, projection, lightDir, viewPos);
 }
 
 void Entity::earlyUpdate(float deltaTime)
 {
-    for(Component* component : components)
+    for(const auto& component : components)
         if(component->receivesUpdates)
             component->earlyUpdate(deltaTime);
 }
 
 void Entity::update(float deltaTime)
 {
-    for(Component* component : components)
+    for(const auto& component : components)
         if(component->receivesUpdates)
             component->update(deltaTime);
 }
 
 void Entity::lateUpdate(float deltaTime)
 {
-    for(Component* component : components)
+    for(const auto& component : components)
         if(component->receivesUpdates)
             component->lateUpdate(deltaTime);
 }
