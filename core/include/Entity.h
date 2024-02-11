@@ -60,23 +60,18 @@ public:
         return returnValue;
     }
 
-    template <typename T, typename... Args>
-    T* addChild(Args... args)
+    template <typename T>
+    void addChild(T* child)
     {
-        children.push_back(std::make_unique<T>(args...));
+        children.push_back(std::unique_ptr<T>(child));
         children.back()->setOwningScene(owningScene);
-
-        return dynamic_cast<T*>(children.back().get());
     }
 
-    template <typename T, typename... Args>
-    T* addComponent(Args... args)
+    template <typename T>
+    void addComponent(T* component)
     {
-        T* component = new T(args...);
         components.push_back(std::unique_ptr<T>(component));
         components.back()->setParent(this);
-
-       return component;
     }
 
 	Transform* getTransform() { return &transform; }

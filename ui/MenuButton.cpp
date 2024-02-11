@@ -24,7 +24,7 @@ MenuButton::MenuButton(glm::vec2 origin, glm::vec2 size, std::string background,
                                                                   nullptr,
                                                                   "block");
     Texture2D texture = AssetManager::getInstance()->loadTexture(background.c_str(), false, background);
-    auto spriteComponent = addComponent<SpriteComponent2D>(spriteShader, texture, size);
+    addComponent<SpriteComponent2D>(new SpriteComponent2D(spriteShader, texture, size));
 
     Shader textShader = AssetManager::getInstance()->loadShader("shaders/text.vert",
                                                                 "shaders/text.frag",
@@ -32,7 +32,8 @@ MenuButton::MenuButton(glm::vec2 origin, glm::vec2 size, std::string background,
                                                                 text);
     TextFont textFont = AssetManager::getInstance()->loadTextFont("assets/arial.ttf",
                                                                   "arial48", 48);
-    auto textComponent = addComponent<TextComponent>(textShader, textFont, text);
+    auto textComponent = new TextComponent(textShader, textFont, text);
+    addComponent<TextComponent>(textComponent);
 
     float offsetPad = (size.y - textComponent->getMaxBearingY()) / 2;
     textComponent->setColor(glm::vec3(.5f, .75f, .5f));
