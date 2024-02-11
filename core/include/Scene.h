@@ -23,7 +23,7 @@ class Scene
 
 public:
     Scene();
-    virtual ~Scene();
+    virtual ~Scene() = default;
     void draw();
     void update();
     void resolveCollisions();

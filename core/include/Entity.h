@@ -25,6 +25,8 @@ public:
 	bool receivesUpdates = false;
     bool shouldBeDestroyed = false;
 
+    virtual ~Entity() = default;
+
 	void setParent(Entity* parent);
     void setOwningScene(Scene* scene);
 

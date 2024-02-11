@@ -24,16 +24,6 @@ Scene::Scene()
                                                                               "screen"));
 }
 
-Scene::~Scene()
-{
-//    std::vector<Entity*> entities = EntityManager::getInstance()->getEntitiesInScene(*this);
-//    for(Entity* entity : entities)
-//    {
-////        InputManager::getInstance()->deregisterReceiver((IInputReceiver*) entity);
-////        EntityManager::getInstance()->deregisterEntity(*entity);
-//    }
-}
-
 void Scene::draw()
 {
 //    // Sort by depth to ensure furthest back objects are drawn first
