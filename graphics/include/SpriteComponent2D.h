@@ -36,6 +36,8 @@ public:
     inline glm::vec2 getSize() { return size; };
     void setSize(glm::vec2 size);
 
+    void setTexture(Texture2D texture);
+
     inline const void setBlendFunc(int in_blendFunc) { blendFunc = in_blendFunc; };
 
 private:

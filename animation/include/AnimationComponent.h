@@ -5,25 +5,33 @@
 #ifndef ANIMATION_COMPONENT_H
 #define ANIMATION_COMPONENT_H
 
-#include <vector>
+#include <list>
 #include <memory>
 #include "Component.h"
 #include "Animation.h"
 
 class AnimationComponent : public Component
 {
-    std::vector<std::unique_ptr<Animation>> animations;
+    std::list<std::unique_ptr<Animation>> animations;
 public:
     void skipAll();
     void update(float deltaTime) override;
     void lateUpdate(float deltaTime) override;
     bool hasAnimations() { return !animations.empty(); }
+    bool hasUnfinishedAnimations() {
+        for(auto&& animation : animations)
+            if(!animation->hasFinished())
+                return true;
+        return false;
+    }
 
-    template<class T, typename... Args>
+    template<typename T, typename... Args>
     T* addAndStart(Args... args)
     {
         T* animation = new T(args...);
-        animations.push_back(std::unique_ptr(animation));
+        animation->start();
+        animations.push_back(std::unique_ptr<T>(animation));
+        receivesUpdates = true;
         return animation;
     }
 
@@ -33,7 +41,7 @@ public:
         std::vector<T> output;
         for(const auto& animation : animations)
         {
-            if(auto castAnimation = dynamic_cast<T*>(animation))
+            if(auto castAnimation = dynamic_cast<T*>(animation.get()))
             {
                 output.push_back(*castAnimation);
             }

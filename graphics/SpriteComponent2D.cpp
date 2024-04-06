@@ -73,6 +73,11 @@ void SpriteComponent2D::setSize(glm::vec2 size)
     transform.scaleTo(glm::vec3(size.x, size.y, 0.0f));
 }
 
+void SpriteComponent2D::setTexture(Texture2D texture)
+{
+    this->texture = texture;
+}
+
 void SpriteComponent2D::InitRenderData()
 {
     // configure VAO/VBO

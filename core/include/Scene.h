@@ -28,7 +28,6 @@ public:
     void update();
     void resolveCollisions();
 
-
     template<typename T, typename... Args>
     T* addEntity(Args... args)
     {
@@ -37,6 +36,32 @@ public:
         entities.back()->setOwningScene(this);
 
         return entity;
+    }
+
+    std::vector<Entity*> getEntities()
+    {
+        std::vector<Entity*> outEntities;
+        for(auto& entity : entities)
+        {
+            outEntities.push_back(entity.get());
+        }
+
+        return outEntities;
+    }
+
+    template<class T>
+    std::vector<T> getEntities()
+    {
+        std::vector<T> outEntities;
+        for(auto& entity : entities)
+        {
+            if(auto castEntity = dynamic_cast<T*>(entity.get()))
+            {
+                outEntities.push_back(castEntity);
+            }
+        }
+
+        return outEntities;
     }
 };
 

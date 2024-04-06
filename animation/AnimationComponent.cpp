@@ -27,8 +27,8 @@ void AnimationComponent::update(float deltaTime)
         if ((*animIter)->isRunning())
         {
             (*animIter)->update(deltaTime);
-            animIter++;
         }
+        animIter++;
     }
 
     if(animations.empty())
@@ -48,9 +48,8 @@ void AnimationComponent::lateUpdate(float deltaTime)
         if ((*animIter)->isRunning())
         {
             (*animIter)->lateUpdate(deltaTime);
-            animIter++;
         }
-
+        ++animIter;
     }
 
     if(animations.empty())

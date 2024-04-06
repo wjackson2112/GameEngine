@@ -16,7 +16,7 @@ class Entity
 {
 protected:
 	Entity* parent = nullptr;
-    std::vector<std::unique_ptr<Entity>> children;
+    std::vector<Entity*> children;
 	std::vector<std::unique_ptr<Component>> components;
 	Transform transform;
     Scene* owningScene;
@@ -65,8 +65,21 @@ public:
     template <typename T>
     void addChild(T* child)
     {
-        children.push_back(std::unique_ptr<T>(child));
-        children.back()->setOwningScene(owningScene);
+        children.push_back(child);
+        children.back()->setParent(this);
+    }
+
+    void removeChild(Entity* in_child)
+    {
+        for(unsigned int i = 0; i < children.size(); i++)
+        {
+            if(in_child == children[i])
+            {
+                children[i]->setParent(nullptr);
+                children.erase(children.begin() + i);
+                break;
+            }
+        }
     }
 
     template <typename T>

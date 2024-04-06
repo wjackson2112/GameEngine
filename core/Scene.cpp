@@ -18,10 +18,14 @@
 
 Scene::Scene()
 {
+// TODO: Emscripten doesn't support glTexImage2DMultisample, handle this in the PostProcessor
+//       so it can use the other features of the postprocessor without crashing
+#ifndef __EMSCRIPTEN__
     postProcessor = new PostProcessor(AssetManager::getInstance()->loadShader("shaders\\screen.vert",
                                                                               "shaders\\screen.frag",
                                                                               nullptr,
                                                                               "screen"));
+#endif
 }
 
 void Scene::draw()
@@ -54,8 +58,11 @@ void Scene::draw()
         }
     }
 
+// Ems
+#ifndef __EMSCRIPTEN__
     // Begin postprocessing
     postProcessor->begin();
+#endif
 
     // Draw to the back buffer
     for (const auto& entity: entities)
@@ -68,8 +75,10 @@ void Scene::draw()
                      cameraWorldTransform.getPosition());
     }
 
+#ifndef __EMSCRIPTEN__
     // End postprocessing
     postProcessor->end();
+#endif
 }
 
 void Scene::update()
