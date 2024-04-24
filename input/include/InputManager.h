@@ -17,7 +17,6 @@ struct InputConfig
 
 class InputManager
 {
-
 	static InputManager* instance;
 	std::map<IInputReceiver*, InputConfig> receivers;
 
@@ -28,13 +27,16 @@ class InputManager
 	InputManager() = default;
 
 public:
-
 	static InputManager *getInstance();
 
 	void registerReceiver(IInputReceiver* receiver, InputConfig config);
     void deregisterReceiver(IInputReceiver* receiver);
 
     bool getLastMouseState(MouseButton button) { return mouseState[button]; }
+
+    static glm::vec2 getCursorPosition() {return getInstance()->cursorPos;};
+    static void setCursorPosition(double xpos, double ypos);
+    static void setCursorPosition(glm::vec2);
 
 	static void mouse_pos_callback(GLFWwindow* window, double xpos, double ypos);
     static void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);

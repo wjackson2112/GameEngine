@@ -1,7 +1,7 @@
 #ifndef SCENE_H
 #define SCENE_H
 
-#include <vector>
+#include <list>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <memory>
@@ -19,7 +19,7 @@ class Scene
 
     PostProcessor* postProcessor;
 
-    std::vector<std::unique_ptr<Entity>> entities;
+    std::list<std::unique_ptr<Entity>> entities;
 
 public:
     Scene();

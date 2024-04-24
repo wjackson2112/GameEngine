@@ -66,7 +66,7 @@ public:
     }
 
     InputEvent(GamepadButton padButton, GamepadAxis axis, float axisValue, Action action)
-    : position(glm::vec2(0,0))
+    : position(InputManager::getCursorPosition())
     , key(KEY_UNKNOWN)
     , mouseButton(MOUSE_BUTTON_NONE)
     , action(action)

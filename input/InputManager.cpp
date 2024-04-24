@@ -28,6 +28,18 @@ void InputManager::deregisterReceiver(IInputReceiver *receiver)
     }
 }
 
+void InputManager::setCursorPosition(double xpos, double ypos)
+{
+    InputManager* manager = getInstance();
+
+    manager->cursorPos = glm::vec2(xpos, ypos);
+}
+
+void InputManager::setCursorPosition(glm::vec2 position)
+{
+    setCursorPosition(position.x, position.y);
+}
+
 void InputManager::mouse_pos_callback(GLFWwindow* window, double xpos, double ypos)
 {
 	InputManager* manager = getInstance();

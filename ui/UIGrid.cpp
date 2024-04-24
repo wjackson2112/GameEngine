@@ -9,8 +9,7 @@
 
 void UIGrid::registerElement(Entity* element)
 {
-    Entity *x;
-    if (std::find(elements.begin(), elements.end(), x) != elements.end())
+    if (std::find(elements.begin(), elements.end(), element) != elements.end())
         return;
 
     elements.push_back(element);
