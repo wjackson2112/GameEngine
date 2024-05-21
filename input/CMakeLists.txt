@@ -1,6 +1,7 @@
 set(SOURCES
-	InputComponent.cpp
-	InputManager.cpp)
+#	InputComponent.cpp
+	InputManager.cpp
+	InputEvent.cpp)
 
 target_include_directories(GameEngine
                            PUBLIC

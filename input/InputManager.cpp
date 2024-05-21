@@ -2,9 +2,6 @@
 #include "InputManager.h"
 #include "OptionsManager.h"
 
-#include <algorithm>
-#include <iostream>
-
 InputManager* InputManager::getInstance()
 {
 	if(!instance)
@@ -12,20 +9,20 @@ InputManager* InputManager::getInstance()
 	return instance;
 }
 
-void InputManager::registerReceiver(IInputReceiver* receiver, InputConfig config)
-{
- 	this->receivers[receiver] = config;
+void InputManager::addBinding(MouseButton button, Action action, Event event, int mods /*= 0*/) {
+    bindings.emplace_back(button, action, event, mods);
 }
 
-void InputManager::deregisterReceiver(IInputReceiver *receiver)
-{
-    for(auto it = receivers.begin(); it != receivers.end(); it++)
-    {
-        if (it->first == receiver) {
-            receivers.erase(it);
-            break;
-        }
-    }
+void InputManager::addBinding(Key button, Action action, Event event, int mods /*= 0*/) {
+    bindings.emplace_back(button, action, event, mods);
+}
+
+void InputManager::addBinding(GamepadButton button, Action action, Event event) {
+    bindings.emplace_back(button, action, event);
+}
+
+void InputManager::addBinding(GamepadAxis axis, Action action, Event event) {
+    bindings.emplace_back(axis, action, event);
 }
 
 void InputManager::setCursorPosition(double xpos, double ypos)
@@ -44,35 +41,55 @@ void InputManager::mouse_pos_callback(GLFWwindow* window, double xpos, double yp
 {
 	InputManager* manager = getInstance();
 
+    if(manager->inputMode != IM_MKB)
+    {
+        manager->inputMode = IM_MKB;
+        EventManager::getInstance()->broadcastEvent(Event(Event::EVT_SWITCH_INPUT_MODE));
+    }
+
     // Convert screen mouse coordinate to viewport mouse coordinate
     glm::vec2 windowSize = OptionsManager::getInstance()->getWindowSize();
     glm::vec2 viewportRes = OptionsManager::getInstance()->getViewportResolution();
 
     manager->cursorPos = glm::vec2(xpos, ypos);
 
-	for(auto const& x : manager->receivers)
-	{
-		IInputReceiver* receiver = x.first;
-        bool receivesMousePosition = x.second.receivesMousePosition;
-
-        if(receivesMousePosition)
-		    receiver->mouseInputCallback(manager->cursorPos.x, manager->cursorPos.y, MOUSE_BUTTON_NONE, ACTION_NONE, (Modifier) 0);
-	}
+    for(ActionBinding binding : manager->bindings)
+    {
+        // Drag event
+        if (binding.button == (MouseButton) manager->lastMouseButton &&
+            binding.action == (Action) ACTION_DRAG &&
+            manager->lastMouseAction == ACTION_PRESS) {
+            EventManager::getInstance()->broadcastEvent(binding.event);
+        }
+            // Generic movement
+        else if (binding.button == (MouseButton) MOUSE_BUTTON_NONE &&
+                 binding.action == (Action) ACTION_NONE) {
+            EventManager::getInstance()->broadcastEvent(binding.event);
+        }
+    }
 }
 
 void InputManager::mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 {
     InputManager* manager = getInstance();
 
+    if(manager->inputMode != IM_MKB)
+    {
+        manager->inputMode = IM_MKB;
+        EventManager::getInstance()->broadcastEvent(Event(Event::EVT_SWITCH_INPUT_MODE));
+    }
+
     manager->mouseState[button] = (Action) action;
 
-    for(auto const& x : manager->receivers)
-    {
-        IInputReceiver* receiver = x.first;
-        std::vector<MouseButton> mouseButtons = x.second.mouseButtons;
+    manager->lastMouseButton = (MouseButton) button;
+    manager->lastMouseAction = (Action) action;
 
-        if(std::find(mouseButtons.begin(), mouseButtons.end(), static_cast<MouseButton>(button)) != mouseButtons.end())
-            receiver->mouseInputCallback(manager->cursorPos.x, manager->cursorPos.y, (MouseButton) button, (Action) action, (Modifier) 0);
+    for(ActionBinding binding : manager->bindings)
+    {
+        if (!binding.isMouseBind())
+            continue;
+        if (binding.button == button && binding.action == action)
+            EventManager::getInstance()->broadcastEvent(binding.event);
     }
 }
 
@@ -80,15 +97,87 @@ void InputManager::key_callback(GLFWwindow* window, int key, int scancode, int a
 {
 	InputManager* manager = getInstance();
 
-	// for(auto const& [receiver, flags] : this->receivers)
-	for(auto const& x : manager->receivers)
-	{
-		IInputReceiver* receiver = x.first;
-		std::vector<Key> keys = x.second.keys;
+    if(manager->inputMode != IM_MKB)
+    {
+        manager->inputMode = IM_MKB;
+        EventManager::getInstance()->broadcastEvent(Event(Event::EVT_SWITCH_INPUT_MODE));
+    }
 
-		if(std::find(keys.begin(), keys.end(), static_cast<Key>(key)) != keys.end())
-			receiver->keyInputCallback((Key) key, scancode, (Action) action, (Modifier) mods);
-	}
+    for(ActionBinding binding : manager->bindings)
+    {
+        if (!binding.isKeyBind())
+            continue;
+        if (binding.key == key && binding.action == action && (binding.mods & mods) == binding.mods)
+            EventManager::getInstance()->broadcastEvent(binding.event);
+    }
+}
+
+void InputManager::pollGamepad()
+{
+#ifndef __EMSCRIPTEN__
+    static GamepadHandle gamepadHandle = GAMEPAD_HANDLE_NONE;
+    InputManager* manager = getInstance();
+
+    // TODO: Make this a stand alone function to get the gamepad handle
+    if(gamepadHandle == GAMEPAD_HANDLE_NONE || !glfwJoystickIsGamepad(gamepadHandle))
+        for(int i = 0; i < GAMEPAD_HANDLE_MAX; i++)
+            if(glfwJoystickPresent(i) && glfwJoystickIsGamepad(i))
+                gamepadHandle = (GamepadHandle) i;
+
+    // If still no gamepad detected, get out
+    if(gamepadHandle == GAMEPAD_HANDLE_NONE || !glfwJoystickIsGamepad(gamepadHandle))
+        return;
+
+
+    if(glfwGetGamepadState(gamepadHandle, &currState))
+    {
+        for(int i = 0; i < GAMEPAD_BUTTON_MAX; i++)
+        {
+            // If the state hasn't changed, continue
+            if (currState.buttons[i] == prevState.buttons[i])
+                continue;
+
+            if(manager->inputMode != IM_GAMEPAD)
+            {
+                manager->inputMode = IM_GAMEPAD;
+                EventManager::getInstance()->broadcastEvent(Event(Event::EVT_SWITCH_INPUT_MODE));
+            }
+
+            GamepadButton gamepadButton = (GamepadButton) i;
+            Action action = (Action) currState.buttons[i];
+
+            for (ActionBinding binding: bindings) {
+                if (!binding.isGamepadButtonBind())
+                    continue;
+                if (binding.gamepadButton == gamepadButton && binding.action == action)
+                    EventManager::getInstance()->broadcastEvent(binding.event);
+            }
+        }
+
+        for(int i = 0; i < GAMEPAD_AXIS_MAX; i++)
+        {
+            if(currState.axes[i] == prevState.axes[i])
+                continue;
+
+            if(manager->inputMode != IM_GAMEPAD)
+            {
+                manager->inputMode = IM_GAMEPAD;
+                EventManager::getInstance()->broadcastEvent(Event(Event::EVT_SWITCH_INPUT_MODE));
+            }
+
+            GamepadAxis gamepadAxis = (GamepadAxis) i;
+            Action action = (Action) currState.axes[i];
+
+            for (ActionBinding binding: bindings) {
+                if (!binding.isGamepadAxisBind())
+                    continue;
+                if (binding.gamepadAxis == gamepadAxis && binding.action == action)
+                    EventManager::getInstance()->broadcastEvent(binding.event);
+            }
+        }
+    }
+#endif
+    prevState = currState;
 }
 
 InputManager *InputManager::instance = 0;

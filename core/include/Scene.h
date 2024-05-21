@@ -5,6 +5,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <memory>
+#include <algorithm>
 
 #include "Entity.h"
 #include "CameraComponentBase.h"
@@ -36,6 +37,18 @@ public:
         entities.back()->setOwningScene(this);
 
         return entity;
+    }
+
+    void removeEntity(Entity* in_entity)
+    {
+        for(auto& entity : entities)
+        {
+            if(entity.get() == in_entity)
+            {
+                entities.erase(std::remove(entities.begin(), entities.end(), entity), entities.end());
+                return;
+            }
+        }
     }
 
     std::vector<Entity*> getEntities()

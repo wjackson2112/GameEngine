@@ -11,13 +11,12 @@
 #include <GLFW\glfw3.h>
 
 #include "Scene.h"
-#include "IInputReceiver.h"
 #include "IEventReceiver.h"
 
 // Don't show a cmd window when starting up (WINDOWS Only)
 #pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
 
-class Window: public IInputReceiver, public IEventReceiver
+class Window: public IEventReceiver
 {
 	GLFWwindow* GLWindow;
 //	std::vector<Scene*> scenes;
@@ -43,11 +42,8 @@ private:
 	bool wireframeMode;
 
 public:
-	//IInputReceiver
-	void keyInputCallback(Key key, int scancode, Action action, Modifier mods);
-
     //IEventReceiver
-    void eventCallback(Event event);
+    void eventCallback(Event event) override;
 
 	// Callback to handle resizing GL with the window
 	static void framebuffer_size_callback(GLFWwindow* window, int width, int height);

@@ -27,6 +27,9 @@ void UIGrid::deregisterAllElements()
 
 Entity *UIGrid::getElementAbove(Entity* element)
 {
+    if(!element)
+        return nullptr;
+
     return getElementAbove(element->getWorldTransform().getPosition2());
 }
 
@@ -94,6 +97,9 @@ Entity *UIGrid::getElementAbove(glm::vec2 position)
 
 Entity *UIGrid::getElementBelow(Entity* element)
 {
+    if(!element)
+        return nullptr;
+
     return getElementBelow(element->getWorldTransform().getPosition2());
 }
 
@@ -162,6 +168,9 @@ Entity *UIGrid::getElementBelow(glm::vec2 position)
 
 Entity *UIGrid::getElementToLeft(Entity* element)
 {
+    if(!element)
+        return nullptr;
+
     return getElementToLeft(element->getWorldTransform().getPosition2());
 }
 
@@ -237,6 +246,9 @@ Entity *UIGrid::getElementToLeft(glm::vec2 position)
 
 Entity* UIGrid::getElementToRight(Entity* element)
 {
+    if(!element)
+        return nullptr;
+
     return getElementToRight(element->getWorldTransform().getPosition2());
 }
 

@@ -6,22 +6,91 @@
 #include <GLFW\glfw3.h>
 #include <glm/glm.hpp>
 #include "Inputs.h"
-#include "IInputReceiver.h"
+//#include "IInputReceiver.h"
+#include "InputEvent.h"
+#include "IEventReceiver.h"
 
-struct InputConfig
+enum InputMode
 {
-    std::vector<Key> keys = std::vector<Key>();
-    std::vector<MouseButton> mouseButtons = std::vector<MouseButton>();
-    bool receivesMousePosition = false;
+    IM_MKB,
+    IM_GAMEPAD
+};
+
+struct ActionBinding
+{
+private:
+    enum {
+        BIND_MOUSEBUTTON,
+        BIND_KEY,
+        BIND_GAMEPADBUTTON,
+        BIND_GAMEPADAXIS
+    } bindType;
+
+public:
+    union {
+        MouseButton button;
+        Key key;
+        GamepadButton gamepadButton;
+        GamepadAxis gamepadAxis;
+    };
+
+    int mods;
+    Action action;
+    Event event;
+
+    ActionBinding(MouseButton button, Action action, Event event, int mods = 0)
+        : button(button)
+        , action(action)
+        , mods(mods)
+        , event(event)
+        , bindType(BIND_MOUSEBUTTON)
+    {}
+
+    ActionBinding(Key key, Action action, Event event, int mods = 0)
+            : key(key)
+            , action(action)
+            , event(event)
+            , mods(mods)
+            , bindType(BIND_KEY)
+    {}
+
+    ActionBinding(GamepadButton gamepadButton, Action action, Event event)
+            : gamepadButton(gamepadButton)
+            , action(action)
+            , event(event)
+            , mods(0)
+            , bindType(BIND_GAMEPADBUTTON)
+    {}
+
+    ActionBinding(GamepadAxis gamepadAxis, Action action, Event event)
+            : gamepadAxis(gamepadAxis)
+            , action(action)
+            , event(event)
+            , mods(0)
+            , bindType(BIND_GAMEPADAXIS)
+    {}
+
+    [[nodiscard]] bool isMouseBind() const { return bindType == BIND_MOUSEBUTTON; }
+    [[nodiscard]] bool isKeyBind() const { return bindType == BIND_KEY; }
+    [[nodiscard]] bool isGamepadBind() const { return bindType == BIND_GAMEPADBUTTON || bindType == BIND_GAMEPADAXIS; }
+    [[nodiscard]] bool isGamepadButtonBind() const { return bindType == BIND_GAMEPADBUTTON; }
+    [[nodiscard]] bool isGamepadAxisBind() const { return bindType == BIND_GAMEPADAXIS; }
 };
 
 class InputManager
 {
 	static InputManager* instance;
-	std::map<IInputReceiver*, InputConfig> receivers;
+    InputMode inputMode = IM_MKB;
+
+    std::vector<ActionBinding> bindings;
 
     glm::vec2 cursorPos = glm::vec2(0, 0);
     std::vector<Action> mouseState = std::vector<Action>(MOUSE_BUTTON_LAST, ACTION_NONE);
+
+    GLFWgamepadstate prevState, currState;
+
+    MouseButton lastMouseButton = MOUSE_BUTTON_NONE;
+    Action lastMouseAction = ACTION_NONE;
 
 	// This is a singleton so the constructor is private
 	InputManager() = default;
@@ -29,10 +98,15 @@ class InputManager
 public:
 	static InputManager *getInstance();
 
-	void registerReceiver(IInputReceiver* receiver, InputConfig config);
-    void deregisterReceiver(IInputReceiver* receiver);
+    void addBinding(MouseButton button, Action action, Event event, int mods = 0);
+    void addBinding(Key button, Action action, Event event, int mods = 0);
+    void addBinding(GamepadButton button, Action action, Event event);
+    void addBinding(GamepadAxis axis, Action action, Event event);
 
     bool getLastMouseState(MouseButton button) { return mouseState[button]; }
+    float getLastGamepadAxesState(GamepadAxis axis) { return currState.axes[axis]; }
+
+    inline InputMode getInputMode() { return inputMode; };
 
     static glm::vec2 getCursorPosition() {return getInstance()->cursorPos;};
     static void setCursorPosition(double xpos, double ypos);
@@ -41,6 +115,8 @@ public:
 	static void mouse_pos_callback(GLFWwindow* window, double xpos, double ypos);
     static void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 	static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+
+    void pollGamepad();
 };
 
 #endif

@@ -5,12 +5,31 @@
 #ifndef IEVENT_RECEIVER_H
 #define IEVENT_RECEIVER_H
 
-// TODO: This should probably templated out and made project specific
-typedef enum {
-    NEW_GAME,
-    WON_GAME,
-    QUIT_GAME
-} Event;
+struct Event
+{
+public:
+    enum
+    {
+        EVT_NONE,
+        EVT_NEW_GAME,
+        EVT_WON_GAME,
+        EVT_QUIT_GAME,
+        EVT_WIREFRAME_MODE,
+        EVT_SWITCH_INPUT_MODE,
+        EVT_PRESS,
+        EVT_DRAG,
+        EVT_RELEASE,
+        EVT_EVENT_LAST
+    };
+
+    operator int(){ return value; }
+    operator int() const{ return value; }
+
+    Event() : value(EVT_NONE) {}
+    explicit Event(int v) : value(v) {}
+private:
+    int value;
+};
 
 class IEventReceiver
 {

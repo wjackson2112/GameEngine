@@ -15,7 +15,7 @@
 
 MenuButton::MenuButton(glm::vec2 origin, glm::vec2 size, std::string background, std::string text, Event event)
 : size(size)
-, event(event)
+, boundEvent(event)
 {
     transform.translate(origin);
 
@@ -38,24 +38,18 @@ MenuButton::MenuButton(glm::vec2 origin, glm::vec2 size, std::string background,
     float offsetPad = (size.y - textComponent->getMaxBearingY()) / 2;
     textComponent->setColor(glm::vec3(.5f, .75f, .5f));
     textComponent->setTransform(glm::vec3(offsetPad, offsetPad, 0.1f));
-
-    InputConfig config = InputConfig();
-    config.mouseButtons.push_back(MOUSE_BUTTON_1);
-    InputManager::getInstance()->registerReceiver(this, config);
 }
 
-MenuButton::~MenuButton()
-{
-    InputManager::getInstance()->deregisterReceiver(this);
-}
+void MenuButton::eventCallback(Event event) {
+    if(event != Event::EVT_RELEASE)
+        return;
 
-void MenuButton::mouseInputCallback(double xpos, double ypos, MouseButton button, Action action, Modifier mods)
-{
+    glm::vec2 cursorPos = InputManager::getCursorPosition();
+
     glm::vec2 origin = getWorldTransform().getPosition2();
-    if(button == MOUSE_BUTTON_LEFT && action == ACTION_RELEASE &&
-       xpos >= origin.x && xpos <= origin.x + size.x &&
-       ypos >= origin.y && ypos <= origin.y + size.y)
+    if(cursorPos.x >= origin.x && cursorPos.x <= origin.x + size.x &&
+       cursorPos.y >= origin.y && cursorPos.y <= origin.y + size.y)
     {
-        EventManager::getInstance()->broadcastEvent(event);
+        EventManager::getInstance()->broadcastEvent(boundEvent);
     }
 }

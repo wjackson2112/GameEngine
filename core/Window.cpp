@@ -1,7 +1,6 @@
 #include "Window.h"
 
 #include <iostream>
-#include <vector>
 #include "InputManager.h"
 #include "OptionsManager.h"
 #include "stb_image.h"
@@ -60,11 +59,6 @@ Window::Window(bool depthTest /* = true */)
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    // Register base inputs
-    InputConfig config = InputConfig();
-    config.keys.push_back(KEY_ESCAPE); config.keys.push_back(KEY_F1);
-	InputManager::getInstance()->registerReceiver(this, config);
-
     stbi_set_flip_vertically_on_load(true);
 
     // VSync off
@@ -88,6 +82,7 @@ void Window::swapBuffers()
 void Window::processInput()
 {
     glfwPollEvents();
+    InputManager::getInstance()->pollGamepad();
 }
 
 void Window::close()
@@ -100,28 +95,15 @@ void Window::getCursorPosition(double* xpos, double* ypos)
 	glfwGetCursorPos(this->GLWindow, xpos, ypos);
 }
 
-void Window::keyInputCallback(Key key, int scancode, Action action, Modifier mods)
-{
-	if(action != GLFW_PRESS)
-		return;
-
-	switch(key)
-	{
-		case KEY_ESCAPE:
-			glfwSetWindowShouldClose(this->GLWindow, true);
-			break;
-		case KEY_F1:
-			this->toggleWireframeMode();
-			break;
-	}
-}
-
 void Window::eventCallback(Event event)
 {
     switch(event)
     {
-        case QUIT_GAME:
+        case Event::EVT_QUIT_GAME:
             glfwSetWindowShouldClose(this->GLWindow, true);
+            break;
+        case Event::EVT_WIREFRAME_MODE:
+            this->toggleWireframeMode();
             break;
         default:
             break;
