@@ -25,6 +25,10 @@ void InputManager::addBinding(GamepadAxis axis, Action action, Event event) {
     bindings.emplace_back(axis, action, event);
 }
 
+void InputManager::clearBindings() {
+    bindings.clear();
+}
+
 void InputManager::setCursorPosition(double xpos, double ypos)
 {
     InputManager* manager = getInstance();

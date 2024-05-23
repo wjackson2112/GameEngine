@@ -103,6 +103,8 @@ public:
     void addBinding(GamepadButton button, Action action, Event event);
     void addBinding(GamepadAxis axis, Action action, Event event);
 
+    void clearBindings();
+
     bool getLastMouseState(MouseButton button) { return mouseState[button]; }
     float getLastGamepadAxesState(GamepadAxis axis) { return currState.axes[axis]; }
 

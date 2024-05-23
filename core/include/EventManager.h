@@ -21,6 +21,7 @@ public:
     static EventManager *getInstance();
 
     void registerReceiver(IEventReceiver* receiver);
+    void deregisterReceiver(IEventReceiver* receiver);
 
     void broadcastEvent(Event event);
 };

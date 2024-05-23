@@ -2,6 +2,7 @@
 // Created by Will on 7/20/2022.
 //
 
+#include <algorithm>
 #include "EventManager.h"
 
 EventManager* EventManager::getInstance()
@@ -22,6 +23,12 @@ void EventManager::broadcastEvent(Event event) {
     {
         receiver->eventCallback(event);
     }
+}
+
+void EventManager::deregisterReceiver(IEventReceiver *receiver) {
+    EventManager* manager = getInstance();
+
+    manager->receivers.erase(std::remove(manager->receivers.begin(), manager->receivers.end(), receiver), manager->receivers.end());
 }
 
 EventManager *EventManager::instance = 0;

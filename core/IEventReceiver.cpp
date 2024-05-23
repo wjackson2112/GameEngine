@@ -9,3 +9,8 @@ IEventReceiver::IEventReceiver()
 {
     EventManager::getInstance()->registerReceiver(this);
 }
+
+IEventReceiver::~IEventReceiver()
+{
+    EventManager::getInstance()->deregisterReceiver(this);
+}
