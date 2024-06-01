@@ -28,6 +28,11 @@ Scene::Scene()
 #endif
 }
 
+bool sortByZ(std::unique_ptr<Entity>& first, std::unique_ptr<Entity>& second)
+{
+    return first->getWorldTransform().getPosition().z < second->getWorldTransform().getPosition().z;
+}
+
 void Scene::draw()
 {
 //    // Sort by depth to ensure furthest back objects are drawn first
@@ -38,9 +43,10 @@ void Scene::draw()
     // TODO: Removed this and turned on depth testing
     //       Keeping it here so it can be used to depth sort _transparent_ objects later
     //       After blending is implemented - https://learnopengl.com/Advanced-OpenGL/Blending
-//    std::stable_sort(entities.begin(), entities.end(), [](Entity* first, Entity* second)
+    entities.sort(sortByZ);
+//    std::stable_sort(entities.begin(), entities.end(), [](Entity& first, Entity& second)
 //    {
-//        return first->getWorldTransform().getPosition().z < second->getWorldTransform().getPosition().z;
+//        return first.getWorldTransform().getPosition().z < second.getWorldTransform().getPosition().z;
 //    }); // TODO: I have no idea if this is better than just turning depth testing back on, check performance once text is implemented
 
 

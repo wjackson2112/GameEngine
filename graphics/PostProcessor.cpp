@@ -19,8 +19,6 @@ PostProcessor::PostProcessor(Shader screenShader)
 : screenShader(screenShader)
 , msaaBuffer(Texture2DMS(4))
 {
-    EventManager::getInstance()->registerReceiver(this);
-
     // Hook up shader
     screenShader.use();
     screenShader.setInt("screenTexture", 0);
