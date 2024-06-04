@@ -8,7 +8,8 @@ set(SOURCES
 	SpriteComponent2D.cpp
 	Texture2D.cpp
 	Texture2DMS.cpp
-	SpriteSheetComponent2D.cpp)
+	SpriteSheetComponent2D.cpp
+	FrameCounterEntity.cpp)
 
 target_include_directories(GameEngine
                            PUBLIC
