@@ -73,6 +73,9 @@ void Scene::draw()
     // Draw to the back buffer
     for (const auto& entity: entities)
     {
+        if(!entity->shouldDraw)
+            continue;
+
         Transform cameraWorldTransform = activeCamera->getWorldTransform();
         glm::mat4 cameraProjection = activeCamera->getProjection();
         entity->draw(glm::inverse(cameraWorldTransform.getModel()),
@@ -101,7 +104,7 @@ void Scene::update()
 
     for (const auto& entity: entities)
     {
-        if(entity->receivesUpdates)
+        if(entity->shouldUpdate)
             entity->earlyUpdate(deltaTime);
     }
 
@@ -118,7 +121,7 @@ void Scene::update()
             if(auto camComp = entity->getComponent<CameraComponentBase>())
                 activeCamera = camComp;
 
-        if(entity->receivesUpdates)
+        if(entity->shouldUpdate)
             entity->update(deltaTime);
     }
 
@@ -131,7 +134,7 @@ void Scene::update()
 //        if(std::find(currentEntities.begin(), currentEntities.end(), entity) == currentEntities.end())
 //            continue;
 
-        if(entity->receivesUpdates)
+        if(entity->shouldUpdate)
             entity->lateUpdate(deltaTime);
     }
 
@@ -163,14 +166,14 @@ void Scene::resolveCollisions()
 //    for(int i = 0; i < entities.size(); i++)
     for(auto it = entities.begin(); it != entities.end(); it++)
     {
-        if(!it->get()->receivesUpdates)
+        if(!it->get()->shouldUpdate)
             continue;
 
 //        for (int j = i + 1; j < entities.size(); j++)
         auto other_it = it; other_it++;
         while(other_it != entities.end())
         {
-            if(!other_it->get()->receivesUpdates)
+            if(!other_it->get()->shouldUpdate)
             {
                 other_it++;
                 continue;

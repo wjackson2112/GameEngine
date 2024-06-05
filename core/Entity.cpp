@@ -27,9 +27,6 @@ void Entity::draw(glm::mat4 view, glm::mat4 projection, glm::vec3 lightDir, glm:
 {
     for(const auto& component : components)
         component->draw(view, projection, lightDir, viewPos);
-
-	for(const auto& child : children)
-		child->draw(view, projection, lightDir, viewPos);
 }
 
 void Entity::earlyUpdate(float deltaTime)

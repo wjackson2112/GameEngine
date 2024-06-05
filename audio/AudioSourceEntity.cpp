@@ -14,5 +14,5 @@ AudioSourceEntity::AudioSourceEntity(std::string path) {
     AudioClip clip = AssetManager::getInstance()->loadAudioClip(path.c_str(), AF_WAV, path);
     srcComponent->play(clip, path, true);
 
-    receivesUpdates = true;
+    shouldUpdate = true;
 }

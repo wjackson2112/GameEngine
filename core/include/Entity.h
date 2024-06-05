@@ -22,7 +22,8 @@ protected:
     Scene* owningScene;
 
 public:
-	bool receivesUpdates = false;
+	bool shouldUpdate = false;
+    bool shouldDraw = true;
     bool shouldBeDestroyed = false;
 
     virtual ~Entity() = default;
