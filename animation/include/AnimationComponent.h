@@ -31,7 +31,7 @@ public:
         T* animation = new T(args...);
         animation->start();
         animations.push_back(std::unique_ptr<T>(animation));
-        receivesUpdates = true;
+        shouldUpdate = true;
         return animation;
     }
 

@@ -11,7 +11,7 @@ void AnimationComponent::skipAll()
         animation->skip();
 
     animations.clear();
-    receivesUpdates = false;
+    shouldUpdate = false;
 }
 
 void AnimationComponent::update(float deltaTime)
@@ -32,7 +32,7 @@ void AnimationComponent::update(float deltaTime)
     }
 
     if(animations.empty())
-        receivesUpdates = false;
+        shouldUpdate = false;
 }
 
 void AnimationComponent::lateUpdate(float deltaTime)
@@ -53,5 +53,5 @@ void AnimationComponent::lateUpdate(float deltaTime)
     }
 
     if(animations.empty())
-        receivesUpdates = false;
+        shouldUpdate = false;
 }

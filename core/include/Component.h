@@ -14,7 +14,7 @@ protected:
     Transform transform = Transform(glm::vec3(0.f, 0.f, 0.f));
 
 public:
-    bool receivesUpdates = false;
+    bool shouldUpdate = false;
     // TODO: This should probably be updated to enforce that all components have a parent set
     Component() : parent(nullptr) { }
     virtual ~Component() = default;

@@ -12,7 +12,7 @@
 
 AudioSourceComponent::AudioSourceComponent()
 {
-    receivesUpdates = true;
+    shouldUpdate = true;
 //    alGenSources(1, &source); al_error::alCheckError();
 //    alSourcef(source, AL_PITCH, 1); al_error::alCheckError();
 //    alSourcef(source, AL_GAIN, 1.0f); al_error::alCheckError();

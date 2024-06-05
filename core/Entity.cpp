@@ -32,20 +32,20 @@ void Entity::draw(glm::mat4 view, glm::mat4 projection, glm::vec3 lightDir, glm:
 void Entity::earlyUpdate(float deltaTime)
 {
     for(const auto& component : components)
-        if(component->receivesUpdates)
+        if(component->shouldUpdate)
             component->earlyUpdate(deltaTime);
 }
 
 void Entity::update(float deltaTime)
 {
     for(const auto& component : components)
-        if(component->receivesUpdates)
+        if(component->shouldUpdate)
             component->update(deltaTime);
 }
 
 void Entity::lateUpdate(float deltaTime)
 {
     for(const auto& component : components)
-        if(component->receivesUpdates)
+        if(component->shouldUpdate)
             component->lateUpdate(deltaTime);
 }
