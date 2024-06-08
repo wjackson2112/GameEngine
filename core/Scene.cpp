@@ -35,20 +35,9 @@ bool sortByZ(std::unique_ptr<Entity>& first, std::unique_ptr<Entity>& second)
 
 void Scene::draw()
 {
-//    // Sort by depth to ensure furthest back objects are drawn first
-//    // TODO: These entities should be made const
-//    EntityManager* entityManager = EntityManager::getInstance();
-//    std::vector<Entity*> entities = entityManager->getEntitiesInScene(*this);
-
-    // TODO: Removed this and turned on depth testing
-    //       Keeping it here so it can be used to depth sort _transparent_ objects later
-    //       After blending is implemented - https://learnopengl.com/Advanced-OpenGL/Blending
+    // Sort objects by depth so transparent objects appear in the right order
+    // TODO: This currently assumes orthogonal camera where z is always distance from camera
     entities.sort(sortByZ);
-//    std::stable_sort(entities.begin(), entities.end(), [](Entity& first, Entity& second)
-//    {
-//        return first.getWorldTransform().getPosition().z < second.getWorldTransform().getPosition().z;
-//    }); // TODO: I have no idea if this is better than just turning depth testing back on, check performance once text is implemented
-
 
     // Find the camera
     // TODO: This should probably be more intentional so multi camera can work

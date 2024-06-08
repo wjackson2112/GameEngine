@@ -51,6 +51,7 @@ public:
     Transform compose(Transform other)
     {
         Transform outTransform = Transform();
+        outTransform.scale = this->scale * other.scale;
         outTransform.rotation = this->rotation * other.rotation;
         outTransform.position = this->position + other.position;
         return outTransform;

@@ -35,6 +35,8 @@ public:
 
     inline glm::vec2 getSize() { return size; };
     void setSize(glm::vec2 size);
+    void scaleToWidth(float width);
+    void scaleToHeight(float height);
 
     void setTexture(Texture2D texture);
 
