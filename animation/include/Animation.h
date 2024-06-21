@@ -23,6 +23,7 @@ protected:
     AnimationState state;
     float lengthSeconds;
     float elapsedSeconds;
+    float prevElapsedSeconds;
 
     Entity* animatedEntity;
     IAnimationCompleteReceiver* receiver = nullptr;

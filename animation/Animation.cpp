@@ -11,23 +11,24 @@ void Animation::start()
 
 void Animation::skip()
 {
-    elapsedSeconds = lengthSeconds;
-    state = FINISHED;
-    if(receiver)
-        ((*receiver).*completeFunction)(animatedEntity);
+    float deltaTime = lengthSeconds - elapsedSeconds;
+
+    update(deltaTime);
+    lateUpdate(deltaTime);
 }
 
 void Animation::update(float deltaTime)
 {
+    prevElapsedSeconds = elapsedSeconds;
     elapsedSeconds += deltaTime;
 }
 
 void Animation::lateUpdate(float deltaTime)
 {
-    if(elapsedSeconds > lengthSeconds)
+    if(elapsedSeconds >= lengthSeconds)
     {
         state = FINISHED;
-        if(receiver)
+        if(receiver && completeFunction)
             ((*receiver).*completeFunction)(animatedEntity);
     }
 }

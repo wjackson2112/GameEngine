@@ -19,12 +19,14 @@ void TransformAnimation::update(float deltaTime)
 {
     Animation::update(deltaTime);
 
+    float frameElapsedSeconds = elapsedSeconds - prevElapsedSeconds;
+
     // Just transform by the bit of distance left, so we don't overshoot
     if(elapsedSeconds >= lengthSeconds)
-        deltaTime = deltaTime - (elapsedSeconds - lengthSeconds);
+        frameElapsedSeconds = frameElapsedSeconds - (elapsedSeconds - lengthSeconds);
 
     glm::vec3 totalMovement = endTransform.getPosition() - startTransform.getPosition();
-    glm::vec3 movement = totalMovement * deltaTime / lengthSeconds;
+    glm::vec3 movement = totalMovement * frameElapsedSeconds / lengthSeconds;
     animatedTransform->translate(movement);
 }
 
