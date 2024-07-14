@@ -5,10 +5,12 @@
 #ifndef IANIMATION_COMPLETE_RECEIVER_H
 #define IANIMATION_COMPLETE_RECEIVER_H
 
+#include <string>
+
 class IAnimationCompleteReceiver
 {
 public:
-    virtual void animationComplete(Entity* animatedEntity) {};
+    virtual void animationCompleteWithId(std::string identifier, Entity* animatedEntity) {};
 };
 
 #endif //IANIMATION_COMPLETE_RECEIVER_H

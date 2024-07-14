@@ -16,7 +16,7 @@ class ColorAnimation : public Animation
     glm::vec4* animatedColor;
 
 public:
-    ColorAnimation(Entity* animatedEntity, glm::vec4 endColor, float lengthSeconds, IAnimationCompleteReceiver* receiver = nullptr, AnimCompleteFunction completeFunction = &IAnimationCompleteReceiver::animationComplete)
+    ColorAnimation(Entity* animatedEntity, glm::vec4 endColor, float lengthSeconds, IAnimationCompleteReceiver* receiver = nullptr, AnimCompleteFunction completeFunction = &IAnimationCompleteReceiver::animationCompleteWithId)
     : Animation(lengthSeconds, animatedEntity, receiver, completeFunction)
     , animatedColor(&animatedEntity->getComponent<SpriteComponent2D>()->color)
     , startColor(animatedEntity->getComponent<SpriteComponent2D>()->color)

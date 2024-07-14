@@ -6,9 +6,13 @@
 #define ANIMATION_H
 
 #include "Entity.h"
+
+#include <functional>
+#include <string>
+
 #include "IAnimationCompleteReceiver.h"
 
-typedef void (IAnimationCompleteReceiver::*AnimCompleteFunction)(Entity* AnimatedEntity);
+typedef std::function<void(IAnimationCompleteReceiver*, std::string identifier, Entity*)> AnimCompleteFunction;
 
 enum AnimationState
 {
@@ -26,15 +30,17 @@ protected:
     float prevElapsedSeconds;
 
     Entity* animatedEntity;
+    std::string completeIdentifier;
     IAnimationCompleteReceiver* receiver = nullptr;
     AnimCompleteFunction completeFunction;
 public:
 
-    Animation(float lengthSeconds, Entity* animatedEntity, IAnimationCompleteReceiver* receiver = nullptr, AnimCompleteFunction completeFunction = &IAnimationCompleteReceiver::animationComplete)
+    Animation(float lengthSeconds, Entity* animatedEntity, IAnimationCompleteReceiver* receiver = nullptr, AnimCompleteFunction completeFunction = &IAnimationCompleteReceiver::animationCompleteWithId, const std::string& completeIdentifier = "")
     : state(WAITING)
     , lengthSeconds(lengthSeconds)
     , elapsedSeconds(0.0f)
     , animatedEntity(animatedEntity)
+    , completeIdentifier(completeIdentifier)
     , receiver(receiver)
     , completeFunction(completeFunction) {}
 
