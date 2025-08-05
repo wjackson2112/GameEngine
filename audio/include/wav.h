@@ -8,6 +8,7 @@
 #include <cstring>
 #include <fstream>
 #include <vector>
+#include <cstdint>
 
 #include <openal-soft-1.22.2/include/AL/al.h>
 #include <openal-soft-1.22.2/include/AL/alc.h>

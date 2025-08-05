@@ -5,7 +5,7 @@
 #else
 #include <glad/glad.h>
 #endif
-#include <GLFW\glfw3.h>
+#include <GLFW/glfw3.h>
 
 #include <algorithm>
 #include <iostream>
@@ -21,8 +21,8 @@ Scene::Scene()
 // TODO: Emscripten doesn't support glTexImage2DMultisample, handle this in the PostProcessor
 //       so it can use the other features of the postprocessor without crashing
 #ifndef __EMSCRIPTEN__
-    postProcessor = new PostProcessor(AssetManager::getInstance()->loadShader("shaders\\screen.vert",
-                                                                              "shaders\\screen.frag",
+    postProcessor = new PostProcessor(AssetManager::getInstance()->loadShader("shaders/screen.vert",
+                                                                              "shaders/screen.frag",
                                                                               nullptr,
                                                                               "screen"));
 #endif

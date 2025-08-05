@@ -3,7 +3,7 @@
 
 #include <map>
 #include <vector>
-#include <GLFW\glfw3.h>
+#include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include "Inputs.h"
 //#include "IInputReceiver.h"

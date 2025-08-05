@@ -9,7 +9,7 @@
 #else
 #include <glad/glad.h>
 #endif
-#include <GLFW\glfw3.h>
+#include <GLFW/glfw3.h>
 #include <iostream>
 
 #include "PostProcessor.h"
