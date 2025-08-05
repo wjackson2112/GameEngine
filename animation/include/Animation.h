@@ -12,7 +12,7 @@
 
 #include "IAnimationCompleteReceiver.h"
 
-typedef std::function<void(IAnimationCompleteReceiver*, std::string identifier, Entity*)> AnimCompleteFunction;
+using AnimCompleteFunction = void(IAnimationCompleteReceiver::*)(std::string, Entity*);
 
 enum AnimationState
 {

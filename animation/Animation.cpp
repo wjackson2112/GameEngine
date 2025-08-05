@@ -29,6 +29,6 @@ void Animation::lateUpdate(float deltaTime)
     {
         state = FINISHED;
         if(receiver && completeFunction)
-            completeFunction(receiver, completeIdentifier, animatedEntity);
+            (receiver->*completeFunction)(completeIdentifier, animatedEntity);
     }
 }
