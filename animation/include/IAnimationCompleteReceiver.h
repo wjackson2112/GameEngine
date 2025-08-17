@@ -10,7 +10,9 @@
 class IAnimationCompleteReceiver
 {
 public:
-    virtual void animationCompleteWithId(std::string identifier, Entity* animatedEntity) {};
+    virtual ~IAnimationCompleteReceiver() = default;
+
+    virtual void animationCompleteWithId(std::string identifier, Entity* animatedEntity) = 0;
 };
 
 #endif //IANIMATION_COMPLETE_RECEIVER_H
