@@ -21,7 +21,8 @@ public:
     SceneStack      sceneStack;
 
     Game(Scene* scene);
-    ~Game();
+
+    virtual ~Game();
 
     void draw();
     virtual void update();

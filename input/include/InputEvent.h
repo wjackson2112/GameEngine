@@ -36,15 +36,15 @@ public:
 
     glm::vec2 position;
 
-    Action action;
+    ButtonAction action;
     Modifier mods;
 
     InputEvent() = default;
 
-    InputEvent(Key key, Action action, Modifier mods);
-    InputEvent(glm::vec2 position, MouseButton mouseButton, Action action, Modifier mods);
-    InputEvent(GamepadButton padButton, GamepadAxis axis, float axisValue, Action action);
-    InputEvent(Event event, Action action);
+    InputEvent(Key key, ButtonAction action, Modifier mods);
+    InputEvent(glm::vec2 position, MouseButton mouseButton, ButtonAction action, Modifier mods);
+    InputEvent(GamepadButton padButton, GamepadAxis axis, float axisValue, ButtonAction action);
+    InputEvent(Event event, ButtonAction action);
 
     inline bool isKeyEvent() { return eventType == IET_KEY; }
     inline bool isMouseEvent() { return eventType == IET_MOUSE; }

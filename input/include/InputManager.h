@@ -35,10 +35,10 @@ public:
     };
 
     int mods;
-    Action action;
+    ButtonAction action;
     Event event;
 
-    ActionBinding(MouseButton button, Action action, Event event, int mods = 0)
+    ActionBinding(MouseButton button, ButtonAction action, Event event, int mods = 0)
         : button(button)
         , action(action)
         , mods(mods)
@@ -46,7 +46,7 @@ public:
         , bindType(BIND_MOUSEBUTTON)
     {}
 
-    ActionBinding(Key key, Action action, Event event, int mods = 0)
+    ActionBinding(Key key, ButtonAction action, Event event, int mods = 0)
             : key(key)
             , action(action)
             , event(event)
@@ -54,7 +54,7 @@ public:
             , bindType(BIND_KEY)
     {}
 
-    ActionBinding(GamepadButton gamepadButton, Action action, Event event)
+    ActionBinding(GamepadButton gamepadButton, ButtonAction action, Event event)
             : gamepadButton(gamepadButton)
             , action(action)
             , event(event)
@@ -62,7 +62,7 @@ public:
             , bindType(BIND_GAMEPADBUTTON)
     {}
 
-    ActionBinding(GamepadAxis gamepadAxis, Action action, Event event)
+    ActionBinding(GamepadAxis gamepadAxis, ButtonAction action, Event event)
             : gamepadAxis(gamepadAxis)
             , action(action)
             , event(event)
@@ -85,12 +85,12 @@ class InputManager
     std::vector<ActionBinding> bindings;
 
     glm::vec2 cursorPos = glm::vec2(0, 0);
-    std::vector<Action> mouseState = std::vector<Action>(MOUSE_BUTTON_LAST, ACTION_NONE);
+    std::vector<ButtonAction> mouseState = std::vector<ButtonAction>(MOUSE_BUTTON_LAST, BUTTON_ACTION_NONE);
 
     GLFWgamepadstate prevState, currState;
 
     MouseButton lastMouseButton = MOUSE_BUTTON_NONE;
-    Action lastMouseAction = ACTION_NONE;
+    ButtonAction lastMouseAction = BUTTON_ACTION_NONE;
 
 	// This is a singleton so the constructor is private
 	InputManager() = default;
@@ -98,10 +98,10 @@ class InputManager
 public:
 	static InputManager *getInstance();
 
-    void addBinding(MouseButton button, Action action, Event event, int mods = 0);
-    void addBinding(Key button, Action action, Event event, int mods = 0);
-    void addBinding(GamepadButton button, Action action, Event event);
-    void addBinding(GamepadAxis axis, Action action, Event event);
+    void addBinding(MouseButton button, ButtonAction action, Event event, int mods = 0);
+    void addBinding(Key button, ButtonAction action, Event event, int mods = 0);
+    void addBinding(GamepadButton button, ButtonAction action, Event event);
+    void addBinding(GamepadAxis axis, ButtonAction action, Event event);
 
     void clearBindings();
 

@@ -5,7 +5,7 @@
 #include "InputEvent.h"
 #include "InputManager.h"
 
-InputEvent::InputEvent(Key key, Action action, Modifier mods)
+InputEvent::InputEvent(Key key, ButtonAction action, Modifier mods)
         : position(glm::vec2(0,0))
         , key(key)
         , mouseButton(MOUSE_BUTTON_NONE)
@@ -19,7 +19,7 @@ InputEvent::InputEvent(Key key, Action action, Modifier mods)
     timeSeconds = glfwGetTime();
 }
 
-InputEvent::InputEvent(glm::vec2 position, MouseButton mouseButton, Action action, Modifier mods)
+InputEvent::InputEvent(glm::vec2 position, MouseButton mouseButton, ButtonAction action, Modifier mods)
                     : position(position)
                     , key(KEY_UNKNOWN)
                     , mouseButton(mouseButton)
@@ -33,7 +33,7 @@ InputEvent::InputEvent(glm::vec2 position, MouseButton mouseButton, Action actio
     timeSeconds = glfwGetTime();
 }
 
-InputEvent::InputEvent(GamepadButton padButton, GamepadAxis axis, float axisValue, Action action)
+InputEvent::InputEvent(GamepadButton padButton, GamepadAxis axis, float axisValue, ButtonAction action)
             : position(InputManager::getCursorPosition())
             , key(KEY_UNKNOWN)
             , mouseButton(MOUSE_BUTTON_NONE)
@@ -47,7 +47,7 @@ InputEvent::InputEvent(GamepadButton padButton, GamepadAxis axis, float axisValu
     timeSeconds = glfwGetTime();
 }
 
-InputEvent::InputEvent(Event event, Action action)
+InputEvent::InputEvent(Event event, ButtonAction action)
         : position(InputManager::getCursorPosition())
         , key(KEY_UNKNOWN)
         , mouseButton(MOUSE_BUTTON_NONE)

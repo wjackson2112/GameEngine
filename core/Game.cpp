@@ -13,7 +13,7 @@ Game::Game(Scene* scene)
 
 Game::~Game()
 {
-    glfwTerminate();
+    sceneStack.clearScenes();
 }
 
 void Game::draw()

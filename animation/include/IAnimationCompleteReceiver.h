@@ -7,6 +7,8 @@
 
 #include <string>
 
+class Entity;
+
 class IAnimationCompleteReceiver
 {
 public:

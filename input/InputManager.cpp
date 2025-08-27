@@ -9,19 +9,19 @@ InputManager* InputManager::getInstance()
 	return instance;
 }
 
-void InputManager::addBinding(MouseButton button, Action action, Event event, int mods /*= 0*/) {
+void InputManager::addBinding(MouseButton button, ButtonAction action, Event event, int mods /*= 0*/) {
     bindings.emplace_back(button, action, event, mods);
 }
 
-void InputManager::addBinding(Key button, Action action, Event event, int mods /*= 0*/) {
+void InputManager::addBinding(Key button, ButtonAction action, Event event, int mods /*= 0*/) {
     bindings.emplace_back(button, action, event, mods);
 }
 
-void InputManager::addBinding(GamepadButton button, Action action, Event event) {
+void InputManager::addBinding(GamepadButton button, ButtonAction action, Event event) {
     bindings.emplace_back(button, action, event);
 }
 
-void InputManager::addBinding(GamepadAxis axis, Action action, Event event) {
+void InputManager::addBinding(GamepadAxis axis, ButtonAction action, Event event) {
     bindings.emplace_back(axis, action, event);
 }
 
@@ -61,13 +61,13 @@ void InputManager::mouse_pos_callback(GLFWwindow* window, double xpos, double yp
     {
         // Drag event
         if (binding.button == (MouseButton) manager->lastMouseButton &&
-            binding.action == (Action) ACTION_DRAG &&
-            manager->lastMouseAction == ACTION_PRESS) {
+            binding.action == (ButtonAction) BUTTON_ACTION_DRAG &&
+            manager->lastMouseAction == BUTTON_ACTION_PRESS) {
             EventManager::getInstance()->broadcastEvent(binding.event);
         }
             // Generic movement
         else if (binding.button == (MouseButton) MOUSE_BUTTON_NONE &&
-                 binding.action == (Action) ACTION_NONE) {
+                 binding.action == (ButtonAction) BUTTON_ACTION_NONE) {
             EventManager::getInstance()->broadcastEvent(binding.event);
         }
     }
@@ -83,10 +83,10 @@ void InputManager::mouse_button_callback(GLFWwindow* window, int button, int act
         EventManager::getInstance()->broadcastEvent(Event(Event::EVT_SWITCH_INPUT_MODE));
     }
 
-    manager->mouseState[button] = (Action) action;
+    manager->mouseState[button] = (ButtonAction) action;
 
     manager->lastMouseButton = (MouseButton) button;
-    manager->lastMouseAction = (Action) action;
+    manager->lastMouseAction = (ButtonAction) action;
 
     for(ActionBinding binding : manager->bindings)
     {
@@ -148,7 +148,7 @@ void InputManager::pollGamepad()
             }
 
             GamepadButton gamepadButton = (GamepadButton) i;
-            Action action = (Action) currState.buttons[i];
+            ButtonAction action = (ButtonAction) currState.buttons[i];
 
             for (ActionBinding binding: bindings) {
                 if (!binding.isGamepadButtonBind())
@@ -170,7 +170,7 @@ void InputManager::pollGamepad()
             }
 
             GamepadAxis gamepadAxis = (GamepadAxis) i;
-            Action action = (Action) currState.axes[i];
+            ButtonAction action = (ButtonAction) currState.axes[i];
 
             for (ActionBinding binding: bindings) {
                 if (!binding.isGamepadAxisBind())

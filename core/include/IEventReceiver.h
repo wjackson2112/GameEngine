@@ -35,7 +35,8 @@ class IEventReceiver
 {
 public:
     IEventReceiver();
-    ~IEventReceiver();
+
+    virtual ~IEventReceiver();
     virtual void eventCallback(Event event) {};
 };
 
