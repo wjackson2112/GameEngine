@@ -2,7 +2,8 @@ set(SOURCES
 	Animation.cpp
 	AnimationComponent.cpp
 	TransformAnimation.cpp
-	ColorAnimation.cpp)
+	ColorAnimation.cpp
+	CompoundAnimation.cpp)
 
 target_include_directories(GameEngine
                            PUBLIC

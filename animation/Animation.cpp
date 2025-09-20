@@ -21,6 +21,9 @@ void Animation::update(float deltaTime)
 {
     prevElapsedSeconds = elapsedSeconds;
     elapsedSeconds += deltaTime;
+
+    if(elapsedSeconds > lengthSeconds)
+        elapsedSeconds = lengthSeconds;
 }
 
 void Animation::lateUpdate(float deltaTime)

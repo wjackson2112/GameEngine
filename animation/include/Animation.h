@@ -34,6 +34,7 @@ protected:
     IAnimationCompleteReceiver* receiver = nullptr;
     AnimCompleteFunction completeFunction;
 public:
+    virtual ~Animation() = default;
 
     Animation(float lengthSeconds, Entity* animatedEntity, IAnimationCompleteReceiver* receiver = nullptr, AnimCompleteFunction completeFunction = &IAnimationCompleteReceiver::animationCompleteWithId, const std::string& completeIdentifier = "")
     : state(WAITING)

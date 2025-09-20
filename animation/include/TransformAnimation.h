@@ -11,15 +11,16 @@
 
 class TransformAnimation : public Animation
 {
-    Transform startTransform, endTransform;
+    Transform deltaTransform;
     Transform* animatedTransform;
+    glm::vec3 startScale;
+
 
 public:
-    TransformAnimation(Entity* animatedEntity, Transform endTransform, float lengthSeconds,  IAnimationCompleteReceiver* receiver = nullptr, AnimCompleteFunction completeFunction = &IAnimationCompleteReceiver::animationCompleteWithId, const std::string& completeIdentifier = "")
+    TransformAnimation(Entity* animatedEntity, Transform deltaTransform, float lengthSeconds,  IAnimationCompleteReceiver* receiver = nullptr, AnimCompleteFunction completeFunction = &IAnimationCompleteReceiver::animationCompleteWithId, const std::string& completeIdentifier = "")
     : Animation(lengthSeconds, animatedEntity, receiver, completeFunction, completeIdentifier)
     , animatedTransform(animatedEntity->getTransform())
-    , startTransform(*animatedEntity->getTransform())
-    , endTransform(endTransform) {}
+    , deltaTransform(deltaTransform) {}
 
     virtual void start();
     virtual void skip();

@@ -51,7 +51,10 @@ public:
     Transform compose(Transform other)
     {
         Transform outTransform = Transform();
-        outTransform.scale = this->scale * other.scale;
+        if(this->scale.x == 0.0f || this->scale.y == 0.0f || this->scale.z == 0.0f)
+            outTransform.scale = other.scale;
+        else
+            outTransform.scale = this->scale * other.scale;
         outTransform.rotation = this->rotation * other.rotation;
         outTransform.position = this->position + other.position;
         return outTransform;

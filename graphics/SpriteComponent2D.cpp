@@ -37,12 +37,14 @@ void SpriteComponent2D::draw(glm::mat4 view, glm::mat4 projection, glm::vec3 lig
     shader.use();
 
     // Start with the accrued transform of the parent
-    Transform transform = getWorldTransform();
+    Transform worldTransform = getWorldTransform();
 
     // Scale to size
-    transform.scaleTo(glm::vec3(size.x, size.y, 0.0f));
+    worldTransform.scaleTo(glm::vec3(size.x * worldTransform.getScale().x,
+                                     size.y * worldTransform.getScale().y,
+                                     worldTransform.getScale().z));
 
-    shader.setMat4("model", transform.getModel());
+    shader.setMat4("model", worldTransform.getModel());
     shader.setMat4("projection", projection);
     shader.setVec4("spriteColor", color);
 
@@ -68,9 +70,6 @@ void SpriteComponent2D::setColor4(glm::vec4 color)
 void SpriteComponent2D::setSize(glm::vec2 size)
 {
     this->size = size;
-
-    // Scale to default size
-    transform.scaleTo(glm::vec3(size.x, size.y, 0.0f));
 }
 
 void SpriteComponent2D::scaleToWidth(float width)
