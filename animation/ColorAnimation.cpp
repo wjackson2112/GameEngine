@@ -7,11 +7,8 @@
 void ColorAnimation::start()
 {
     Animation::start();
-}
 
-void ColorAnimation::skip()
-{
-    Animation::skip();
+    startColor = *animatedColor;
 }
 
 void ColorAnimation::update(float deltaTime)

@@ -1,6 +1,9 @@
 
 #include "InputManager.h"
 #include "OptionsManager.h"
+#ifdef __EMSCRIPTEN__
+#include "emscripten/key_codes.h"
+#endif
 
 InputManager* InputManager::getInstance()
 {
@@ -115,6 +118,13 @@ void InputManager::key_callback(GLFWwindow* window, int key, int scancode, int a
             EventManager::getInstance()->broadcastEvent(binding.event);
     }
 }
+
+#ifdef __EMSCRIPTEN__
+EM_BOOL InputManager::em_keydown(int eventType, const EmscriptenKeyboardEvent *e, void *userData)
+{
+    return EM_TRUE;
+}
+#endif
 
 void InputManager::pollGamepad()
 {

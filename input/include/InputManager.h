@@ -1,6 +1,9 @@
 #ifndef INPUT_MANAGER_H
 #define INPUT_MANAGER_H
 
+#ifdef __EMSCRIPTEN__
+#include <emscripten/html5.h>
+#endif
 #include <map>
 #include <vector>
 #include <GLFW/glfw3.h>
@@ -117,6 +120,9 @@ public:
 	static void mouse_pos_callback(GLFWwindow* window, double xpos, double ypos);
     static void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 	static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+#ifdef __EMSCRIPTEN__
+    static EM_BOOL em_keydown(int eventType, const EmscriptenKeyboardEvent *e, void *userData);
+#endif
 
     void pollGamepad();
 };

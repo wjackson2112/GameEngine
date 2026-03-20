@@ -14,6 +14,7 @@ public:
         EVT_NEW_GAME,
         EVT_WON_GAME,
         EVT_QUIT_GAME,
+        EVT_RESET_GAME,
         EVT_WIREFRAME_MODE,
         EVT_SWITCH_INPUT_MODE,
         EVT_PRESS,

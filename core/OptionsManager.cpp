@@ -4,12 +4,31 @@
 
 #include "OptionsManager.h"
 
+#include "Globals.h"
+#include "emscripten/html5.h"
+#include "glfw-3.3.2/include/GLFW/glfw3.h"
+
 OptionsManager *OptionsManager::instance = nullptr;
 
 OptionsManager::OptionsManager()
-: windowSize(glm::vec2(1600.0f,1200.0f))
-, viewportResolution(glm::vec2(1600.0f,1200.0f))
-{}
+{
+#ifdef __EMSCRIPTEN__
+    int width = EM_ASM_INT({
+        return window.innerWidth;
+    });
+    int height = EM_ASM_INT({
+        return window.innerHeight;
+    });
+
+    emscripten_set_canvas_element_size("#canvas", width, height);
+
+    windowSize = { width, height };
+    viewportResolution = { width, height };
+#else
+    windowSize = { 1600.f, 1200.f };
+    viewportResolution = { 1600.f, 1200.f };
+#endif
+}
 
 OptionsManager *OptionsManager::getInstance()
 {

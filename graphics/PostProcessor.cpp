@@ -14,6 +14,9 @@
 
 #include "PostProcessor.h"
 #include "EventManager.h"
+#include "OptionsManager.h"
+
+
 
 PostProcessor::PostProcessor(Shader screenShader)
 : screenShader(screenShader)
@@ -35,19 +38,27 @@ PostProcessor::PostProcessor(Shader screenShader)
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
 
+    glm::vec2 viewportRes = OptionsManager::getInstance()->getViewportResolution();
+    generateBuffers(viewportRes.x, viewportRes.y);
+
+    OptionsManager::getInstance()->registerReceiver(this);
+}
+
+void PostProcessor::generateBuffers(int width, int height)
+{
     // Configure MSAA Framebuffer
     glGenFramebuffers(1, &msaaFBO);
     glBindFramebuffer(GL_FRAMEBUFFER, msaaFBO);
 
     // Create MSAA Color Attachment
-    msaaBuffer.generate(1600, 1200, nullptr);
+    msaaBuffer.generate(width, height, nullptr);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE, msaaBuffer.id, 0);
 
     // Create MSAA Renderbuffer
     unsigned int rbo;
     glGenRenderbuffers(1, &rbo);
     glBindRenderbuffer(GL_RENDERBUFFER, rbo);
-    glRenderbufferStorageMultisample(GL_RENDERBUFFER, 4, GL_DEPTH24_STENCIL8, 1600, 1200);
+    glRenderbufferStorageMultisample(GL_RENDERBUFFER, 4, GL_DEPTH24_STENCIL8, width, height);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
 
     // Check for completeness
@@ -60,7 +71,7 @@ PostProcessor::PostProcessor(Shader screenShader)
     glBindFramebuffer(GL_FRAMEBUFFER, interFBO);
 
     // Create Intermediate Color Attachment
-    interBuffer.generate(1600, 1200, nullptr);
+    interBuffer.generate(width, height, nullptr);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, interBuffer.id, 0);
 
     // Check for completeness
@@ -83,6 +94,8 @@ void PostProcessor::begin()
 
 void PostProcessor::end()
 {
+    glm::vec2 viewportRes = OptionsManager::getInstance()->getViewportResolution();
+
     static float deltaTime = 0.0f;
     static float lastFrame = 0.0f;
 
@@ -93,7 +106,7 @@ void PostProcessor::end()
     // Blit the MSAA Framebuffer to the Intermediate and down sample
     glBindFramebuffer(GL_READ_FRAMEBUFFER, msaaFBO);
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER, interFBO);
-    glBlitFramebuffer(0, 0, 1600, 1200, 0, 0, 1600, 1200, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+    glBlitFramebuffer(0, 0, viewportRes.x, viewportRes.y, 0, 0, viewportRes.x, viewportRes.y, GL_COLOR_BUFFER_BIT, GL_NEAREST);
 
     // Bind to the default Framebuffer
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -189,4 +202,9 @@ void PostProcessor::eventCallback(Event event)
 //        default:
 //            break;
 //    }
+}
+
+void PostProcessor::resolutionUpdated(glm::vec2 oldRes, glm::vec2 newRes)
+{
+    generateBuffers(newRes.x, newRes.y);
 }

@@ -1,6 +1,7 @@
 #include "Window.h"
 
 #include <iostream>
+#include "Globals.h"
 #include "InputManager.h"
 #include "OptionsManager.h"
 #include "stb_image.h"
@@ -30,6 +31,13 @@ Window::Window(bool depthTest /* = true */)
     glfwSetMouseButtonCallback(this->GLWindow, InputManager::mouse_button_callback);
 	glfwSetKeyCallback(this->GLWindow, InputManager::key_callback);
 
+	// Configure Emscripten callbacks
+#ifdef __EMSCRIPTEN__
+	emscripten_set_fullscreenchange_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, NULL, EM_FALSE, Window::em_fullscreenchange_callback);
+	emscripten_set_resize_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, NULL, EM_FALSE, Window::em_on_canvas_resize);
+	emscripten_set_keydown_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, NULL, EM_FALSE, InputManager::em_keydown);
+#endif
+
 	// Load GLAD
 #ifndef __EMSCRIPTEN__
 	if(!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress))
@@ -40,7 +48,9 @@ Window::Window(bool depthTest /* = true */)
 #endif
 
 	// Setup viewport and resizing
-	glViewport(0, 0, 1600, 1200);
+	glViewport(0, 0,
+	           OptionsManager::getInstance()->getViewportResolution().x,
+	           OptionsManager::getInstance()->getViewportResolution().y);
 	glfwSetFramebufferSizeCallback(GLWindow, framebuffer_size_callback);
 
     glfwSetWindowSizeLimits(GLWindow, 640, 480, GLFW_DONT_CARE, GLFW_DONT_CARE);
@@ -133,3 +143,33 @@ void Window::framebuffer_size_callback(GLFWwindow *window, int width, int height
     OptionsManager* optionsManager = OptionsManager::getInstance();
     optionsManager->updateResolution(glm::vec2(width, height));
 }
+
+#ifdef __EMSCRIPTEN__
+bool Window::em_fullscreenchange_callback(int eventType, const EmscriptenFullscreenChangeEvent *e, void *userData)
+{
+	glViewport(0, 0, e->screenWidth, e->screenHeight);
+
+	OptionsManager* optionsManager = OptionsManager::getInstance();
+	optionsManager->updateResolution(glm::vec2(e->screenWidth, e->screenHeight));
+
+	return true;
+}
+
+bool Window::em_on_canvas_resize(int eventType, const EmscriptenUiEvent *e, void *userData)
+{
+	EmscriptenFullscreenChangeEvent fs_status;
+	EMSCRIPTEN_RESULT result = emscripten_get_fullscreen_status(&fs_status);
+	if(result == EMSCRIPTEN_RESULT_SUCCESS && fs_status.isFullscreen)
+	{
+		return EM_FALSE;
+	}
+
+	glViewport(0, 0, e->windowInnerWidth, e->windowInnerHeight);
+	glfwSetWindowSize(GWindow.GLWindow, e->windowInnerWidth, e->windowInnerHeight);
+
+	OptionsManager* optionsManager = OptionsManager::getInstance();
+	optionsManager->updateResolution(glm::vec2(e->windowInnerWidth, e->windowInnerHeight));
+
+	return EM_TRUE;
+}
+#endif

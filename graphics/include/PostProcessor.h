@@ -9,8 +9,9 @@
 #include "Texture2D.h"
 #include "Texture2DMS.h"
 #include "IEventReceiver.h"
+#include "IOptionsReceiver.h"
 
-class PostProcessor : public IEventReceiver
+class PostProcessor : public IEventReceiver, public IOptionsReceiver
 {
     Shader screenShader;
 
@@ -38,6 +39,8 @@ class PostProcessor : public IEventReceiver
             1.0f,  1.0f,  1.0f, 1.0f
     };
 
+    void generateBuffers(int width, int height);
+
 public:
     explicit PostProcessor(Shader screenShader);
 
@@ -45,6 +48,7 @@ public:
     void end();
 
     void eventCallback(Event event) override;
+    void resolutionUpdated(glm::vec2 oldRes, glm::vec2 newRes);
 };
 
 #endif //POSTPROCESSOR_H

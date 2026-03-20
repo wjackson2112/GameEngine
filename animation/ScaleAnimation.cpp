@@ -9,9 +9,6 @@ void ScaleAnimation::start()
 {
     Animation::start();
     startScale = animatedTransform->getScale();
-    std::cout << "Scale started" << std::endl;
-    std::cout << animatedTransform->getPosition().x << " " << animatedTransform->getPosition().y << " " << animatedTransform->getPosition().z << std::endl;
-    std::cout << animatedTransform->getScale().x << " " << animatedTransform->getScale().y << " " << animatedTransform->getScale().z << std::endl;
 }
 
 void ScaleAnimation::update(float deltaTime)

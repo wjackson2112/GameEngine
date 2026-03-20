@@ -7,7 +7,6 @@
 
 #include "Transform.h"
 #include "Animation.h"
-#include "Entity.h"
 
 class TranslationAnimation : public Animation
 {
@@ -15,9 +14,9 @@ class TranslationAnimation : public Animation
     Transform* animatedTransform;
 
 public:
-    TranslationAnimation(Entity* animatedEntity, glm::vec3 deltaTranslation, float lengthSeconds,  IAnimationCompleteReceiver* receiver = nullptr, AnimCompleteFunction completeFunction = &IAnimationCompleteReceiver::animationCompleteWithId, const std::string& completeIdentifier = "")
-    : Animation(lengthSeconds, animatedEntity, receiver, completeFunction, completeIdentifier)
-    , animatedTransform(animatedEntity->getTransform())
+    TranslationAnimation(Transform* animatedTransform, glm::vec3 deltaTranslation, float lengthSeconds,  IAnimationCompleteReceiver* receiver = nullptr, AnimCompleteFunction completeFunction = &IAnimationCompleteReceiver::animationComplete, const std::string& completeIdentifier = "")
+    : Animation(lengthSeconds, receiver, completeFunction, completeIdentifier)
+    , animatedTransform(animatedTransform)
     , deltaTranslation(deltaTranslation) {}
 
     virtual void update(float deltaTime);

@@ -22,10 +22,10 @@ class CompoundAnimation : public Animation
 {
     std::list<CompoundAnimationEntry> animations;
 public:
-    CompoundAnimation(float lengthSeconds, Entity* animatedEntity, IAnimationCompleteReceiver* receiver = nullptr,
-                      AnimCompleteFunction completeFunction = &IAnimationCompleteReceiver::animationCompleteWithId,
+    CompoundAnimation(float lengthSeconds, IAnimationCompleteReceiver* receiver = nullptr,
+                      AnimCompleteFunction completeFunction = &IAnimationCompleteReceiver::animationComplete,
                       const std::string& completeIdentifier = "")
-    : Animation(lengthSeconds, animatedEntity, receiver, completeFunction, completeIdentifier) {};
+    : Animation(lengthSeconds, receiver, completeFunction, completeIdentifier) {};
 
     template<typename T, typename... Args>
     T* addAnimation(float startTime, Args... args)

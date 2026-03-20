@@ -3,6 +3,7 @@
 
 #ifdef __EMSCRIPTEN__
 #include <emscripten.h>
+#include <emscripten/html5.h>
 #define GL_GLEXT_PROTOTYPES
 #define EGL_EGLEXT_PROTOTYPES
 #else
@@ -35,6 +36,7 @@ public:
     void close();
 
 	void getCursorPosition(double* xpos, double* ypos);
+	GLFWwindow* getGLFWWindow() { return GLWindow; };
  
 public:
 	void toggleWireframeMode();
@@ -47,6 +49,10 @@ public:
 
 	// Callback to handle resizing GL with the window
 	static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+#ifdef __EMSCRIPTEN__
+	static bool em_fullscreenchange_callback(int eventType, const EmscriptenFullscreenChangeEvent *e, void *userData);
+	static bool em_on_canvas_resize(int eventType, const EmscriptenUiEvent *e, void *userData);
+#endif
 
 };
 

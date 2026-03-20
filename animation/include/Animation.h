@@ -12,7 +12,7 @@
 
 #include "IAnimationCompleteReceiver.h"
 
-using AnimCompleteFunction = void(IAnimationCompleteReceiver::*)(std::string, Entity*);
+using AnimCompleteFunction = void(IAnimationCompleteReceiver::*)(std::string);
 
 enum AnimationState
 {
@@ -29,18 +29,16 @@ protected:
     float elapsedSeconds;
     float prevElapsedSeconds;
 
-    Entity* animatedEntity;
     std::string completeIdentifier;
     IAnimationCompleteReceiver* receiver = nullptr;
     AnimCompleteFunction completeFunction;
 public:
     virtual ~Animation() = default;
 
-    Animation(float lengthSeconds, Entity* animatedEntity, IAnimationCompleteReceiver* receiver = nullptr, AnimCompleteFunction completeFunction = &IAnimationCompleteReceiver::animationCompleteWithId, const std::string& completeIdentifier = "")
+    Animation(float lengthSeconds, IAnimationCompleteReceiver* receiver = nullptr, AnimCompleteFunction completeFunction = &IAnimationCompleteReceiver::animationComplete, const std::string& completeIdentifier = "")
     : state(WAITING)
     , lengthSeconds(lengthSeconds)
     , elapsedSeconds(0.0f)
-    , animatedEntity(animatedEntity)
     , completeIdentifier(completeIdentifier)
     , receiver(receiver)
     , completeFunction(completeFunction) {}
