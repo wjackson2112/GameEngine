@@ -1,3 +1,6 @@
+//  Copyright (c) 2026 William Jackson
+//  Licensed under the MIT License
+
 #ifndef WINDOW_H
 #define WINDOW_H
 

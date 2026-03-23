@@ -1,3 +1,6 @@
+//  Copyright (c) 2026 William Jackson
+//  Licensed under the MIT License
+
 #ifndef TRANSFORM_H
 #define TRANSFORM_H
 

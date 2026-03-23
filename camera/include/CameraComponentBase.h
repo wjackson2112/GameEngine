@@ -1,3 +1,6 @@
+//  Copyright (c) 2026 William Jackson
+//  Licensed under the MIT License
+
 #ifndef CAMERA_COMPONENT_BASE_H
 #define CAMERA_COMPONENT_BASE_H
 

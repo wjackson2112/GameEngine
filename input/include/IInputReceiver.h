@@ -1,3 +1,6 @@
+//  Copyright (c) 2026 William Jackson
+//  Licensed under the MIT License
+
 #ifndef IINPUT_RECEIVER_H
 #define IINPUT_RECEIVER_H
 

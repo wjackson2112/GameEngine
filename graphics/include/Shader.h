@@ -1,3 +1,6 @@
+//  Copyright (c) 2026 William Jackson
+//  Licensed under the MIT License
+
 //https://learnopengl.com/Getting-started/Shaders
 
 #ifndef SHADER_H

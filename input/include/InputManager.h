@@ -1,3 +1,6 @@
+//  Copyright (c) 2026 William Jackson
+//  Licensed under the MIT License
+
 #ifndef INPUT_MANAGER_H
 #define INPUT_MANAGER_H
 

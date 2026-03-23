@@ -1,4 +1,7 @@
 
+//  Copyright (c) 2026 William Jackson
+//  Licensed under the MIT License
+
 #include "InputManager.h"
 #include "OptionsManager.h"
 #ifdef __EMSCRIPTEN__
